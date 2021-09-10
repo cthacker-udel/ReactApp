@@ -58,6 +58,7 @@ class ShoppingCart extends React.Component{
 
         this.list.push(thetext);
         console.log(`The list is : ${list}`);
+        
 
     }
 
