@@ -1,0 +1,14 @@
+.shopping-list{
+
+    font-size: medium;
+    color: green;
+    background-color: black;
+    border: 1px dashed white;
+
+}
+
+.shopping-list li{
+
+    color: white;
+
+}

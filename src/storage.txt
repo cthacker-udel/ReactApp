@@ -1,0 +1,51 @@
+/*
+class ShoppingCart extends React.Component{
+
+    render(){
+
+        return (
+
+            <div classname="thecar">
+
+                <ul>
+
+                    <li>First item</li>
+
+                </ul>
+
+            </div>
+
+
+        );
+
+    }
+
+}
+*/
+
+orig main
+
+
+function MainPage(){
+
+    return(
+
+            React.createElement('div',null,
+            
+                React.createElement('p',null,'Hello World! This is my first webpage')
+            
+            )
+
+    );
+
+}
+
+orig reactdom render
+
+ReactDOM.render(
+    <React.StrictMode>
+        <MainPage />
+        //<ShoppingCart />
+    </React.StrictMode>,
+    document.getElementById('root')
+);
