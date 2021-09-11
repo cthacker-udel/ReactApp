@@ -9,7 +9,7 @@ class MainPage extends React.Component{
         return(
             <div>
 
-                    <div className="shoppingcartDiv">
+                    <div>
                         <ShoppingCart />
                     </div>
             </div>
@@ -22,22 +22,127 @@ class MainPage extends React.Component{
 
 }
 
+class ShoppingCartText extends React.Component{
+
+    constructor(props){
+
+        super(props);
+
+        this.state = {
+
+            value: '',
+
+        }
+
+    }
+
+    render(){
+        
+        console.log(`textbox = ${this}`);
+        return(
+
+            <input type="text" height="500px" width="500px" onChange={this.props.handleChange}/>
+
+        );
+
+    }
+
+}
+
+class ShoppingCartItem extends React.Component{
+
+    constructor(props){
+
+        super(props);
+
+    }
+
+}
+
+class ShoppingCartButton extends React.Component{
+
+    constructor(props){
+
+        super(props);
+
+    }
+
+    render(){
+        return(
+
+        <button height="200px" width="200px" onClick={this.props.handleClick}>
+
+            {this.props.value}
+
+        </button>
+
+        );
+    }
+
+}
+
 class ShoppingCart extends React.Component{
+
+    constructor(props){
+        super(props);
+
+        this.state = {
+
+            items: [],
+            textValue: '',
+
+        };
+
+    }
+
+    handleChange = (event) => {
+
+        console.log(event.target.value); // textbox value
+        this.setState({textValue: event.target.value});
+        console.log(this);
+
+    }
+
+    handleClick = (event) => {
+
+        console.log(event);
+        console.log(`textval11 = ${this.state.textValue}`);
+        if(this.state.textValue === ''){
+            // nothing is entered
+            return;
+        }
+        else{
+            this.setState({items: this.state.items.concat(this.state.textValue)});
+            this.setState({textValue: ''});
+        }
+
+    }
 
     render(){
 
+        const listItems = this.state.items.map(e => {
+            
+                return(
+
+                    <li key={e}>{e}</li>
+
+                );
+            }
+            
+        );
+
         return(
 
-            <div className="shooping-list">
+            <div className="ShoppingCartList">
+                <h1>Shopping Cart List</h1>
+                <ol>
 
-                <h1>This is a shoppingList</h1>
-                <ul>
+                    {listItems}
 
-                    <li>Eggs</li>
-
-                </ul>
-                <CartButton />
-
+                </ol>
+                <ShoppingCartText handleChange={this.handleChange}/>
+                <br />
+                <ShoppingCartButton value={'Add an item'} handleClick={this.handleClick}/>
 
             </div>
 
@@ -49,44 +154,6 @@ class ShoppingCart extends React.Component{
 
 }
 
-class CartButton extends React.Component{
-
-    constructor(props){
-
-        super(props);
-
-        this.state = {
-
-            value: "",
-
-        }
-
-    }
-
-    render(){
-
-        return(
-            
-                <button className="shoppingCartButton" height="200px" width="200px" onClick={() => {
-                    
-                        this.state.value = this.state.value + 'e';
-                        console.log(this);
-                        this.setState(this.state);
-                    
-                    }
-                    
-                }>
-                    {this.state.value}
-                </button>
-
-
-        );
-
-
-    }
-
-
-}
 
 
 ReactDOM.render(
