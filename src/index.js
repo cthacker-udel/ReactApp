@@ -67,7 +67,7 @@ class CartButton extends React.Component{
 
         return(
             
-                <button height="200px" width="200px" onClick={() => {
+                <button className="shoppingCartButton" height="200px" width="200px" onClick={() => {
                     
                         this.state.value = this.state.value + 'e';
                         console.log(this);
