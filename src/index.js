@@ -49,16 +49,6 @@ class ShoppingCartText extends React.Component{
 
 }
 
-class ShoppingCartItem extends React.Component{
-
-    constructor(props){
-
-        super(props);
-
-    }
-
-}
-
 class ShoppingCartButton extends React.Component{
 
     constructor(props){
