@@ -7,28 +7,13 @@ class MainPage extends React.Component{
     render(){
 
         return(
-        
-            <html>
+            <div>
 
-                <head>
-
-                    <link rel="stylesheet" href="indexstyle.css"></link>
-
-                </head>
-
-                <body>
-
-                    <div className="shoppingCartDiv">
-
+                    <div className="shoppingcartDiv">
                         <ShoppingCart />
-                        <CartText />
-                        <CartButton />
-
                     </div>
+            </div>
 
-                </body>
-
-            </html>
 
 
         );
@@ -37,30 +22,7 @@ class MainPage extends React.Component{
 
 }
 
-function handleThePress(){
-
-    let elem = <li>document.getElementById("cartText").value</li>;
-    ShoppingCart.handlePress(elem);
-
-}
-
-var list = [];
-
 class ShoppingCart extends React.Component{
-
-    addItem(i){
-
-        return <CartItem item={i} />
-
-    }
-
-    handlePress(thetext){
-
-        this.list.push(thetext);
-        console.log(`The list is : ${list}`);
-        
-
-    }
 
     render(){
 
@@ -71,9 +33,10 @@ class ShoppingCart extends React.Component{
                 <h1>This is a shoppingList</h1>
                 <ul>
 
-                    {this.addItem('eggs')}
+                    <li>Eggs</li>
 
                 </ul>
+                <CartButton />
 
 
             </div>
@@ -86,31 +49,35 @@ class ShoppingCart extends React.Component{
 
 }
 
-class CartText extends React.Component{
+class CartButton extends React.Component{
 
-    render(){
+    constructor(props){
 
-        return(
+        super(props);
 
-            <input type="text" id="cartText" height="200px" width="200px"/>
+        this.state = {
 
-        );
+            value: "",
+
+        }
 
     }
-
-}
-
-class CartButton extends React.Component{
 
     render(){
 
         return(
             
-            <form>
-                <button value="Add Item" onClick={handleThePress}>
-                    Add Item
+                <button height="200px" width="200px" onClick={() => {
+                    
+                        this.state.value = this.state.value + 'e';
+                        console.log(this);
+                        this.setState(this.state);
+                    
+                    }
+                    
+                }>
+                    {this.state.value}
                 </button>
-            </form>
 
 
         );
@@ -118,23 +85,6 @@ class CartButton extends React.Component{
 
     }
 
-
-}
-
-
-class CartItem extends React.Component{
-
-    render(){
-
-        return(
-
-            <li>
-                {this.props.item}
-            </li>
-
-        );
-
-    }
 
 }
 
