@@ -26,12 +26,12 @@ class PokerCard extends React.Component{
 
 }
 
-class Dealer extends React.Component{
 
+/*
 
+How do I initialize a state Variable? Such as if I wanted to default have 3 cards on the table when a game starts
 
-
-}
+*/
 
 
 class MainPage extends React.Component{
@@ -74,6 +74,7 @@ class MainPage extends React.Component{
             tableCards: [],
             playerTurn: true,
             chips: 0,
+            gameStarted: false,
 
         }
     }
@@ -86,12 +87,14 @@ class MainPage extends React.Component{
 
     tableCardsInit = () => {
 
+        let amt = (this.state.playerHand.length > 0? 1: 3);
+
         if(this.state.cards.length === 0){
             return;
         }
         let theCards = this.state.tableCards;
         let count = 0;
-        while(count < 3 && this.state.cards.length > 0){
+        while(count < amt && this.state.cards.length > 0){
             const aStr = this.state.cards.pop();
             theCards.push(aStr);
             count++;
@@ -99,6 +102,44 @@ class MainPage extends React.Component{
         this.setState({tableCards: theCards});
         console.log(this.state);
         console.log(`theCards = ${theCards}`);
+
+    }
+
+    playerCardsInit = () => {
+
+        if(this.state.cards.length === 0){
+            return;
+        }
+        let theCards = this.state.playerHand;
+        for(let i = 0; i < 2; i++){
+            const aStr = this.state.cards.pop();
+            theCards.push(aStr);
+        }
+        this.setState({playerHand: theCards});
+        console.log(this.state);
+
+    }
+
+    computerCardsInit = () => {
+
+        if(this.state.cards.length === 0){
+            return;
+        }
+        let theCards = this.state.computerHand;
+        for(let i = 0; i < 2; i++){
+            const aStr = this.state.cards.pop();
+            theCards.push(aStr);
+        }
+        this.setState({computerHand: theCards});
+        console.log(this.state);
+
+    }
+
+    startGame = () => {
+
+        this.tableCardsInit();
+        this.playerCardsInit();
+        this.computerCardsInit();
 
     }
 
@@ -110,7 +151,27 @@ class MainPage extends React.Component{
 
             return(
 
-                <PokerCard cardName={e} key={i} />
+                <PokerCard cardName={e} key={e} />
+
+            );
+
+        })
+
+        const theComputerCards = this.state.computerHand.map((e,i) => {
+
+            return(
+
+                <PokerCard cardName={e} key={e} />
+
+            );
+
+        })
+
+        const thePlayerCards = this.state.playerHand.map((e,i) => {
+
+            return(
+
+                <PokerCard cardName={"backofcard"} key={e} />
 
             );
 
@@ -139,11 +200,24 @@ class MainPage extends React.Component{
                         <Col style={{border: "2px dashed black"}}>{theTableCards}</Col>
 
                     </Row>
+                    <br />
+                    <Row>
+
+                        <Col>
+                        
+                        <h4 style={{textAlign: "center"}}>Computer Cards</h4>
+                        
+                        </Col>
+
+                    </Row>
+                    <Row>
+
+                        <Col style={{border: "2px dashed black"}}>{theComputerCards}</Col>
+
+                    </Row>
                     <Row>
                         <Col>
-
-                            <Button variant="primary" onClick={this.tableCardsInit}>Draw Card</Button>
-
+                            <Button variant="primary" onClick={this.startGame}>Start Game</Button>
                         </Col>
                     </Row>
                 </Container>
