@@ -6,8 +6,25 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
+import Image from 'react-bootstrap/Image'
 
+class PokerCard extends React.Component{
 
+    constructor(props){
+        super(props);
+    }
+
+    render(){
+
+        return(
+
+            <Image src={'./cards/' + this.props.cardName + '.PNG'} rounded />
+
+        );
+
+    }
+
+}
 
 class Dealer extends React.Component{
 
@@ -24,14 +41,18 @@ class MainPage extends React.Component{
 
         this.state = {
 
-            cards: ['ah','kh','qh','jh','10h','9h','8h','7h','6h','5h','4h','3h','2h','ad','kd','qd','jd','10d','9d','8d','7d','6d','5d','4d','3d','2d',
-            'as','ks','qs','js','10s','9s','8s','7s','6s','5s','4s','3s','2s','ac','kc','qc','jc','10c','9c','8c','7c','6c','5c','4c','3c','2c'
+            cards: ['acehearts','kinghearts','queenhearts','jackhearts','tenhearts','ninehearts','eighthearts','sevenhearts','sixhearts','fivehearts','fourhearts','threehearts',
+            'twohearts','acediamonds','kingdiamonds','queendiamonds','jackdiamonds','tendiamonds','ninediamonds','eightdiamonds','sevendiamonds','sixdiamonds','fivediamonds',
+            'fourdiamonds','threediamonds','twodiamonds','acespads','kingspades','queenspades','jackspades','tenspades','ninespades','eightspades','sevenspades',
+            'sixspades','fivespades','fourspades','threespades','twospades','aceclubs','kingclubs','queenclubs','jackclubs','tenclubs','nineclubs','eightclubs',
+            'sevenclubs','sixclubs','fiveclubs','fourclubs','threeclubs','twoclubs'
             ],
 
             playerHand: [], 
             computerHand: [],
             tableCards: [],
             playerTurn: true,
+            chips: 0,
 
         }
 
@@ -63,7 +84,15 @@ class MainPage extends React.Component{
     }
 
 
+    render(){
 
+        return(
+
+            
+
+        );
+
+    }
 
 
 }
