@@ -6,19 +6,13 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
+import { isTrivialHref } from '@restart/ui/esm/Button';
 
 
 class LeftText extends React.Component{
 
     constructor(props){
         super(props);
-
-        this.state = {
-
-            value: 0,
-
-        }
-
     }
 
     render(){
@@ -128,7 +122,7 @@ class CalculationResult extends React.Component{
                 <Form.Group className="calcResult" controlId="basicCalcResultDisplay">
 
                     <Form.Label>Calculation Result</Form.Label>
-                    <Form.Control type="text" placeholder="?"></Form.Control>
+                    <Form.Control type="text" placeholder={this.props.val}></Form.Control>
                     <Form.Text className="calculationText">
                         This displays the result of the calculation
                     </Form.Text>
@@ -153,9 +147,10 @@ class MainPage extends React.Component{
 
         this.state = {
 
-            result: "?",
+            result: 0,
             leftNum: 0,
             rightNum: 0,
+            history: [],
 
         }
 
@@ -188,6 +183,38 @@ class MainPage extends React.Component{
 
         console.log(`name = ${event.target.name}`);
 
+        if(event.target.name === "mult"){
+            // multiply
+            const res = +this.state.leftNum * +this.state.rightNum;
+            this.setState({result: res});
+        }
+        else if(event.target.name === "add"){
+            // addition
+            const res = +this.state.leftNum + +this.state.rightNum;
+            this.setState({result: res});
+        }
+        else if(event.target.name === "divide"){
+            // divide
+            if(this.state.rightNum === 0){
+                const res = "NaN";
+                this.setState({result: res});
+            }
+            else{
+                const res = +this.state.leftNum / +this.state.rightNum;
+                this.setState({result: res});
+            }
+        }
+        else if(event.target.name === "sub"){
+            // subtraction
+            const res = +this.state.leftNum - +this.state.rightNum;
+            this.setState({result: res});
+        }
+        else if(event.target.name === "pow"){
+            // power
+            const res = Number(this.state.leftNum) ** +this.state.rightNum;
+            this.setState({result: res});
+        }
+
     }
 
     render(){
@@ -204,7 +231,7 @@ class MainPage extends React.Component{
                     </Col>
                     <Col xs={4}>
 
-                        <CalculationResult />
+                        <CalculationResult val={this.state.result}/>
 
                     </Col>
                 </Row>
