@@ -1,5 +1,109 @@
 import React from 'react';
 import ReactDOM, { render } from 'react-dom';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import Button from 'react-bootstrap/Button';
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+import Form from 'react-bootstrap/Form';
+
+
+class LeftText extends React.Component{
+
+    constructor(props){
+        super(props);
+    }
+
+    render(){
+        
+        return(
+            <Form>
+
+                <Form.Group className="leftText" controlId="rightoperand">
+
+                    <Form.Label>Left Number</Form.Label>
+                    <Form.Control type="number" placeholder="0"></Form.Control>
+                    <Form.Text>This is the left operand such as ? + 10 = ?</Form.Text>
+
+                </Form.Group>
+
+            </Form>
+        );
+
+    }
+
+}
+
+
+class RightText extends React.Component{
+
+    constructor(props){
+        super(props);
+    }
+
+    render(){
+
+        return(
+            <Form>
+
+                <Form.Group className="rightText" controlId="rightoperand">
+
+                    <Form.Label>Right Number</Form.Label>
+                    <Form.Control type="number" placeholder="0"></Form.Control>
+                    <Form.Text>This is the right operand such as 10 + ? = ?</Form.Text>
+
+                </Form.Group>
+
+            </Form>
+        );
+
+    }
+
+}
+
+
+class EquateButton extends React.Component{
+
+    constructor(props){
+        super(props);
+    }
+
+    render(){
+
+        return(
+            <Button variant="success" style={{display: "block",margin: "auto"}}>Calculate</Button>
+        );
+
+    }
+
+}
+
+class OperandType extends React.Component{
+
+    constructor(props){
+        super(props);
+    }
+
+    render(){
+
+        return(
+            <>
+            <Button variant="outline-dark">Multiply</Button>
+            <br></br>
+            <Button variant="outline-dark">Add</Button>
+            <br></br>
+            <Button variant="outline-dark">Subtract</Button>
+            <br></br>
+            <Button variant="outline-dark">Divide</Button>
+            <br></br>
+            <Button variant="outline-dark">Power</Button>
+            </>
+
+        );
+
+    }
+
+}
 
 
 class MainPage extends React.Component{
@@ -7,148 +111,50 @@ class MainPage extends React.Component{
     render(){
 
         return(
-            <div>
-
-                    <div>
-                        <ShoppingCart />
-                    </div>
-            </div>
-
-
-
-        );
-
-    }
-
-}
-
-class ShoppingCartText extends React.Component{
-
-    constructor(props){
-
-        super(props);
-
-        this.state = {
-
-            value: '',
-
-        }
-
-    }
-
-    render(){
-        
-        console.log(`textbox = ${this}`);
-        return(
-
-            <input type="text" height="500px" width="500px" onChange={this.props.handleChange}/>
-
-        );
-
-    }
-
-}
-
-class ShoppingCartButton extends React.Component{
-
-    constructor(props){
-
-        super(props);
-
-    }
-
-    render(){
-        return(
-
-        <button height="200px" width="200px" onClick={this.props.handleClick}>
-
-            {this.props.value}
-
-        </button>
-
-        );
-    }
-
-}
-
-class ShoppingCart extends React.Component{
-
-    constructor(props){
-        super(props);
-
-        this.state = {
-
-            items: [],
-            textValue: '',
-
-        };
-
-    }
-
-    handleChange = (event) => {
-
-        console.log(event.target.value); // textbox value
-        this.setState({textValue: event.target.value});
-        console.log(this);
-
-    }
-
-    handleClick = (event) => {
-
-        console.log(event);
-        console.log(`textval11 = ${this.state.textValue}`);
-        if(this.state.textValue === ''){
-            // nothing is entered
-            return;
-        }
-        else{
-            this.setState({items: this.state.items.concat(this.state.textValue)});
-            this.setState({textValue: ''});
-        }
-
-    }
-
-    render(){
-
-        const listItems = this.state.items.map(e => {
             
-                return(
+            <Container>
+                <Row>
+                    <Col>
+                        <LeftText />
+                    </Col>
+                    <Col>
+                        <RightText />
+                    </Col>
+                </Row>
+                <Row>
+                    <Col>
 
-                    <li key={e}>{e}</li>
+                        <EquateButton />
 
-                );
-            }
-            
-        );
+                    </Col>
+                </Row>
+                <Row>
 
-        return(
+                    <Col>
 
-            <div className="ShoppingCartList">
-                <h1>Shopping Cart List</h1>
-                <ol>
+                        <OperandType />
 
-                    {listItems}
+                    </Col>
 
-                </ol>
-                <ShoppingCartText handleChange={this.handleChange}/>
-                <br />
-                <ShoppingCartButton value={'Add an item'} handleClick={this.handleClick}/>
-
-            </div>
-
+                </Row>
+            </Container>
 
         );
 
     }
 
-
 }
+
 
 
 
 ReactDOM.render(
+
     <React.StrictMode>
+
         <MainPage />
+
     </React.StrictMode>,
     document.getElementById('root')
+
 );
