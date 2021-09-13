@@ -106,6 +106,7 @@ class MainPage extends React.Component{
         this.setState({tableCards: theCards});
         console.log(this.state);
         console.log(`theCards = ${theCards}`);
+        return;
 
     }
 
@@ -148,7 +149,7 @@ class MainPage extends React.Component{
 
     startGame = () => {
 
-        this.tableCardsInit();
+        let tableRes = this.tableCardsInit();
         this.playerCardsInit();
         this.computerCardsInit();
 
