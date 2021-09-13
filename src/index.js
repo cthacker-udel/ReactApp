@@ -87,6 +87,10 @@ class MainPage extends React.Component{
 
     tableCardsInit = () => {
 
+        if(this.state.tableCards.length === 5){
+            // max amt of cards
+            return;
+        }
         let amt = (this.state.playerHand.length > 0? 1: 3);
 
         if(this.state.cards.length === 0){
@@ -107,6 +111,10 @@ class MainPage extends React.Component{
 
     playerCardsInit = () => {
 
+        if(this.state.playerHand.length === 2){
+            // max amt of player cards
+            return;
+        }
         if(this.state.cards.length === 0){
             return;
         }
@@ -121,7 +129,10 @@ class MainPage extends React.Component{
     }
 
     computerCardsInit = () => {
-
+        
+        if(this.state.computerHand.length === 2){
+            return;
+        }
         if(this.state.cards.length === 0){
             return;
         }
@@ -161,7 +172,7 @@ class MainPage extends React.Component{
 
             return(
 
-                <PokerCard cardName={e} key={e} />
+                <PokerCard cardName={"backofcard"} key={e} />
 
             );
 
@@ -171,7 +182,7 @@ class MainPage extends React.Component{
 
             return(
 
-                <PokerCard cardName={"backofcard"} key={e} />
+                <PokerCard cardName={e} key={e} />
 
             );
 
@@ -186,8 +197,12 @@ class MainPage extends React.Component{
                     </Row>
                     <Row>
                         <Col><h3 style={{textAlign: "center"}}>Wins : 0</h3></Col>
+                        <Col><h3 style={{textAlign: "center"}}>Chips : {this.state.chips}</h3></Col>
                         <Col><h3 style={{textAlign: "center"}}>Losses : 0</h3></Col>
                     </Row>
+                    <br />
+                    <br />
+                    <br />
                     <Row>
                         <Col>
 
@@ -216,9 +231,30 @@ class MainPage extends React.Component{
 
                     </Row>
                     <Row>
+                        <Col style={{textAlign: "center"}}><h4>Player Cards</h4></Col>
+                    </Row>
+                    <Row>
+                        <Col style={{border: "2px dashed black"}}>{thePlayerCards}</Col>
+                    </Row>
+                    <Row>
                         <Col>
-                            <Button variant="primary" onClick={this.startGame}>Start Game</Button>
+                            <Button variant="primary" style={{margin: "auto", display: "block", textAlign: "center"}}>Fold</Button>
                         </Col>
+                        <Col>
+                            <Button variant="primary" style={{margin: "auto", display: "block", textAlign: "center"}}>Raise</Button>
+                        </Col>
+                        <Col>
+                            <Button variant="primary" style={{margin: "auto", display: "block", textAlign: "center"}}>Call</Button>
+                        </Col>
+                    </Row>
+                    <br />
+                    <br />
+                    <Row>
+
+                        <Col>
+                            <Button variant="primary" onClick={this.startGame} style={{margin: "auto", display: "block", textAlign: "center"}}>Start Game</Button>
+                        </Col>
+
                     </Row>
                 </Container>
             </>
