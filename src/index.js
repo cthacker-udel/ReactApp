@@ -43,7 +43,7 @@ class MainPage extends React.Component{
             var currentIndex = array.length,  randomIndex;
 
             // While there remain elements to shuffle...
-            while (currentIndex != 0) {
+            while (currentIndex !== 0) {
 
                 // Pick a remaining element...
                 randomIndex = Math.floor(Math.random() * currentIndex);
@@ -76,7 +76,6 @@ class MainPage extends React.Component{
             chips: 0,
 
         }
-
     }
 
     determineTurn = () => {
@@ -106,6 +105,7 @@ class MainPage extends React.Component{
 
     render(){
 
+        
         const theTableCards = this.state.tableCards.map((e,i) => {
 
             return(
@@ -115,8 +115,7 @@ class MainPage extends React.Component{
             );
 
         })
-
-        console.log(`thetablecards = ${theTableCards}`);
+        
 
         return(
             <>
