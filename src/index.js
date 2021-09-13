@@ -65,7 +65,7 @@ class MainPage extends React.Component{
     }
 
     /* from https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array [first answer] */
-    shuffle = (arr) => {
+    shuffle = (array) => {
 
         var currentIndex = array.length,  randomIndex;
 
@@ -87,9 +87,17 @@ class MainPage extends React.Component{
     render(){
 
         return(
-
-            
-
+            <>
+                <Container fluid>
+                    <Row>
+                        <Col><h1 style={{textAlign: "center"}}>Poker Game</h1></Col>
+                    </Row>
+                    <Row>
+                        <Col><h3 style={{textAlign: "center"}}>Wins : 0</h3></Col>
+                        <Col><h3 style={{textAlign: "center"}}>Losses : 0</h3></Col>
+                    </Row>
+                </Container>
+            </>
         );
 
     }
