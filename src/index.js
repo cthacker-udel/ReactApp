@@ -8,34 +8,6 @@ import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Image from 'react-bootstrap/Image'
 
-
-royalFlush = (cards) => {
-
-    let suits = ['hearts','clubs','spades','diamonds'];
-    let ranks = ['ace','king','queen','jack','ten'];
-
-    let foundMatch = false;
-    for(let i = 0; i < suits.length; i++){
-        foundMatch = true;
-        for(let j = 0; j < ranks.length; j++){
-
-            if(cards.includes(`${ranks[j]}${suits[i]}`)){
-                continue;
-            }
-            else{
-                foundMatch = false;
-                break;
-            }
-
-        }
-        if(foundMatch){
-            return true;
-        }
-    }
-    return false;
-
-}
-
 class PokerCard extends React.Component{
 
     constructor(props){
@@ -62,6 +34,120 @@ How do I initialize a state Variable? Such as if I wanted to default have 3 card
 
 
 class MainPage extends React.Component{
+
+
+    /*
+
+        POKER METHODS
+
+    */
+
+        royalFlush = (cards) => {
+
+            let suits = ['hearts','clubs','spades','diamonds'];
+            let ranks = ['ace','king','queen','jack','ten'];
+        
+            let foundMatch = false;
+            for(let i = 0; i < suits.length; i++){
+                foundMatch = true;
+                for(let j = 0; j < ranks.length; j++){
+        
+                    if(cards.includes(`${ranks[j]}${suits[i]}`)){
+                        continue;
+                    }
+                    else{
+                        foundMatch = false;
+                        break;
+                    }
+        
+                }
+                if(foundMatch){
+                    return true;
+                }
+            }
+            return false;
+        
+        }
+        
+        sameSuit = (cards) => {
+        
+            let suits = ['hearts','clubs','spades','diamonds'];
+        
+            let theSuits = {'hearts': 0, 'clubs': 0, 'spades': 0, 'diamonds': 0};
+        
+            for(let i = 0; i < cards.length; i++){
+        
+                for(let j of suits){
+                    if(cards[i].includes(j)){
+                        theSuits[j] += 1;
+                    }
+                }
+        
+            }
+            return Object.keys(theSuits).map(e => theSuits[e]).some(e => e >= 5);
+        
+        }
+        
+        consecutive = (cards) => {
+        
+            let ranks = {'ace': 14, 'king': 13, 'queen': 12, 'jack': 11, 'ten': 10, 'nine': 9, 'eight': 8, 'seven': 7, 'six': 6, 'five': 5, 'four': 4, 'three': 3, 'two': 2};
+        
+            let theNumRanks = [];
+            for(let i = 0; i < cards.length; i++){
+                let theCard = cards[i];
+                for(let j of Object.keys(ranks)){
+                    if(theCard.includes(j)){
+                        theNumRanks.push(ranks[j]);
+                    }
+                }
+            }
+        
+            theNumRanks.sort((a,b) => a-b);
+            for(let i = 0; i < theNumRanks.length-1; i++){
+        
+                let iRank = theNumRanks[i];
+                let jRank = theNumRanks[i+1];
+                if(Math.abs(iRank - jRank) !== 1){
+                    return false;
+                }
+        
+            }
+            return true;
+        
+        }
+        
+        getCardRank = (card) => {
+        
+            let ranks = {'ace': 14, 'king': 13, 'queen': 12, 'jack': 11, 'ten': 10, 'nine': 9, 'eight': 8, 'seven': 7, 'six': 6, 'five': 5, 'four': 4, 'three': 3, 'two': 2};
+        
+            for(let i of Object.keys(ranks)){
+                if(card.includes(i)){
+                    return ranks[i];
+                }
+            }
+        
+        }
+        
+        straightFlush = (cards) => {
+        
+            if(!this.sameSuit(cards)){
+                return false;
+            }
+            if(!this.consecutive(cards)){
+                return false;
+            }
+            cards.sort((a,b) => this.getCardRank(a) - this.getCardRank(b));
+        
+        
+        
+        }
+
+
+    /*
+
+        POKER METHODS
+
+    */
 
     /* from https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array [first answer] */
     shuffle = (array) => {
