@@ -8,6 +8,34 @@ import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Image from 'react-bootstrap/Image'
 
+
+royalFlush = (cards) => {
+
+    let suits = ['hearts','clubs','spades','diamonds'];
+    let ranks = ['ace','king','queen','jack','ten'];
+
+    let foundMatch = false;
+    for(let i = 0; i < suits.length; i++){
+        foundMatch = true;
+        for(let j = 0; j < ranks.length; j++){
+
+            if(cards.includes(`${ranks[j]}${suits[i]}`)){
+                continue;
+            }
+            else{
+                foundMatch = false;
+                break;
+            }
+
+        }
+        if(foundMatch){
+            return true;
+        }
+    }
+    return false;
+
+}
+
 class PokerCard extends React.Component{
 
     constructor(props){
@@ -25,7 +53,6 @@ class PokerCard extends React.Component{
     }
 
 }
-
 
 /*
 
