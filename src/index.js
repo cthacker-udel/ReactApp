@@ -371,7 +371,7 @@ class MainPage extends React.Component{
 
     tableCardsInit = () => {
 
-        if(this.state.tableCards.length === 10){
+        if(this.state.tableCards.length === 5){
             // max amt of cards
             return;
         }
