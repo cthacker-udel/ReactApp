@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import ReactDOM, { render } from 'react-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Button from 'react-bootstrap/Button';
@@ -6,8 +6,9 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
-import Image from 'react-bootstrap/Image'
-import Table from 'react-bootstrap/Table'
+import Image from 'react-bootstrap/Image';
+import Table from 'react-bootstrap/Table';
+import Offcanvas from 'react-bootstrap/Offcanvas';
 
 
 class Board extends React.Component{
@@ -16,10 +17,10 @@ class Board extends React.Component{
 
         return(
 
-            <Table striped bordered hover size="sm">
+            <Table striped bordered hover size="sm" id="battleshiptable">
 
                 <thead>
-                    <tr>
+                    <tr style={{textAlign: "center"}}>
                         <th>A</th>
                         <th>B</th>
                         <th>C</th>
@@ -27,8 +28,8 @@ class Board extends React.Component{
                         <th>E</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <tr>
+                <tbody style={{textAlign: "center"}}>
+                    <tr style={{height: "200px"}}>
                         <td>
                             A1
                         </td>
@@ -45,7 +46,7 @@ class Board extends React.Component{
                             E1
                         </td>
                     </tr>
-                    <tr>
+                    <tr style={{height: "200px"}}>
                         <td>
                             A2
                         </td>
@@ -62,7 +63,7 @@ class Board extends React.Component{
                             E2
                         </td>
                     </tr>
-                    <tr>
+                    <tr style={{height: "200px"}}>
                         <td>
                             A3
                         </td>
@@ -79,7 +80,7 @@ class Board extends React.Component{
                             E3
                         </td>
                     </tr>
-                    <tr>
+                    <tr style={{height: "200px"}}>
                         <td>
                             A4
                         </td>
@@ -96,7 +97,7 @@ class Board extends React.Component{
                             E4
                         </td>
                     </tr>
-                    <tr>
+                    <tr style={{height: "200px"}}>
                         <td>
                             A5
                         </td>
@@ -123,6 +124,49 @@ class Board extends React.Component{
 
 }
 
+function NavigationButton(){
+
+    const [show,setShow] = useState(false);
+
+    const handleShow = () => setShow(true);
+    const handleClose = () => setShow(false);
+
+
+    return(
+
+            <>
+                <Button variant="primary" onClick={handleShow} style={{margin: "auto", display: "block", textAlign: "center"}}>
+                    Main Menu
+                </Button>
+
+                <Offcanvas show={show} onHide={handleClose} scroll={true}>
+                    <Offcanvas.Header closeButton>
+                        <Offcanvas.Title>Main Menu</Offcanvas.Title>
+                    </Offcanvas.Header>
+
+                    <Offcanvas.Body>
+
+                        <a href="index.html">Back to Main Page</a>
+                        <br />
+                        <a href="poker.jsx">To Poker</a>
+                        <br />
+                        <a href="calculator.jsx">Calculator</a>
+                        <br />
+                        <a href="bootstrapreview.html">Bootstrap Review</a>
+                        <br />
+                        <a href="fullreviews.html">Full reviews - Week 1</a>
+
+                    </Offcanvas.Body>
+
+                </Offcanvas>
+            </>
+
+    );
+
+
+
+}
+
 
 class MainPage extends React.Component{
 
@@ -134,7 +178,22 @@ class MainPage extends React.Component{
 
         return(
             <>
-            <Board />
+                <Row>
+
+                    <Col>
+
+                    <Board />
+
+                    </Col>
+
+                </Row>
+                <Row>
+                    <Col>
+
+                        <NavigationButton/>
+
+                    </Col>
+                </Row>
             </>
         );
 
