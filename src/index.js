@@ -144,7 +144,13 @@ class MainPage extends React.Component{
 
         rankCount = (card,cards) => {
 
+            if(cards === undefined || card === undefined){
+                return 0;
+            }
+
             cards = cards.map(e => e.replace('hearts','').replace('spades','').replace('diamonds','').replace('clubs',''));
+
+            card = card.replace('hearts','').replace('spades','').replace('diamonds','').replace('clubs','');
 
             return cards.filter(e => e === card).length;
 
@@ -159,11 +165,11 @@ class MainPage extends React.Component{
 
                 let cnt = this.rankCount(eachcard,cards);
                 if(cnt === 4){
-                    theKinds.push(eachcard);
+                    return true;
                 }
 
             }
-            return new Set(theKinds);
+            return false;
 
         }
 
@@ -203,13 +209,70 @@ class MainPage extends React.Component{
 
             for(let eachcard of cards){
 
-                let res = this.rankCount(eachcard);
+                let res = this.rankCount(eachcard,cards);
                 if(res === 3){
                     return true;
                 }
 
             }
             return false;
+
+        }
+
+        twoPairs = (cards) => {
+
+            let cnt = 0;
+            for(let eachcard of cards){
+
+                let rank = eachcard.replace('hearts','').replace('spades','').replace('diamonds','').replace('clubs','');
+                let res = this.rankCount(rank,cards);
+                if(res === 2){
+                    cnt++;
+                }
+
+            }
+            return cnt === 2;
+
+        }
+
+        cardCombos = (cards) => {
+
+            /*
+
+                1 - royal flush
+                2 - straight flush
+                3 - four of a kind
+                4 - full house
+                5 - flush
+                6 - straight
+                7 - three of a kind
+
+            */
+
+            let res = 0;
+
+            if(this.royalFlush(cards)){
+                res = 1;
+            }
+            else if(this.straightFlush(cards)){
+                res = 2;
+            }
+            else if(this.fourOfAKind(cards)){
+                res = 3;
+            }
+            else if(this.fullHouse(cards)){
+                res = 4;
+            }
+            else if(this.flush(cards)){
+                res = 5;
+            }
+            else if(this.straight(cards)){
+                res = 6;
+            }
+            else if(this.threeOfAKind(cards)){
+                res = 7;
+            }
+            return res;
 
         }
 
@@ -334,9 +397,22 @@ class MainPage extends React.Component{
 
     startGame = () => {
 
+        /*
+
+        Calculate card combos
+
+        */
+
         let tableRes = this.tableCardsInit();
         this.playerCardsInit();
         this.computerCardsInit();
+        if(this.state.tableCards.length > 0){
+            let res = [...this.state.tableCards,...this.state.playerHand];
+            console.log(`the hand = ${res}`);
+            res = this.cardCombos(res);
+            console.log(`The result was : ${res}`);
+        }
+
         document.getElementById('mainButton').innerHTML = "Deal Table Card";
 
     }
