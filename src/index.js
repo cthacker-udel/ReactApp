@@ -153,11 +153,11 @@ class MainPage extends React.Component{
 
         fourOfAKind = (cards) => {
 
-            theKinds = [];
+            let theKinds = [];
 
             for(let eachcard of cards){
 
-                let cnt = rankCount(eachcard,cards);
+                let cnt = this.rankCount(eachcard,cards);
                 if(cnt === 4){
                     theKinds.push(eachcard);
                 }
@@ -166,6 +166,28 @@ class MainPage extends React.Component{
             return new Set(theKinds);
 
         }
+
+        fullHouse = (cards) => {
+
+            let found2kind = false;
+            let found3kind = false;
+
+            for(let eachcard of cards){
+
+                let cnt = this.rankCount(eachcard,cards);
+                if(cnt === 2){
+                    found2kind = true;
+                }
+                else if(cnt === 3){
+                    found3kind = true;
+                }
+
+            }
+            return found2kind && found3kind;
+
+        }
+
+        
 
 
     /*
