@@ -142,6 +142,31 @@ class MainPage extends React.Component{
         
         }
 
+        rankCount = (card,cards) => {
+
+            cards = cards.map(e => e.replace('hearts','').replace('spades','').replace('diamonds','').replace('clubs',''));
+
+            return cards.filter(e => e === card).length;
+
+
+        }
+
+        fourOfAKind = (cards) => {
+
+            theKinds = [];
+
+            for(let eachcard of cards){
+
+                let cnt = rankCount(eachcard,cards);
+                if(cnt === 4){
+                    theKinds.push(eachcard);
+                }
+
+            }
+            return new Set(theKinds);
+
+        }
+
 
     /*
 
@@ -188,6 +213,7 @@ class MainPage extends React.Component{
             playerTurn: true,
             chips: 0,
             gameStarted: false,
+            mainButtonTextBool: false,
 
         }
     }
@@ -265,6 +291,7 @@ class MainPage extends React.Component{
         let tableRes = this.tableCardsInit();
         this.playerCardsInit();
         this.computerCardsInit();
+        document.getElementById('mainButton').innerHTML = "Deal Table Card";
 
     }
 
@@ -366,7 +393,7 @@ class MainPage extends React.Component{
                     <Row>
 
                         <Col>
-                            <Button variant="primary" onClick={this.startGame} style={{margin: "auto", display: "block", textAlign: "center"}}>Start Game</Button>
+                            <Button variant="primary" onClick={this.startGame} style={{margin: "auto", display: "block", textAlign: "center"}} id="mainButton">Start Game</Button>
                         </Col>
 
                     </Row>
