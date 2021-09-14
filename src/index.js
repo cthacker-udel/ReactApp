@@ -193,6 +193,26 @@ class MainPage extends React.Component{
 
         }
 
+        straight = (cards) => {
+
+            return this.consecutive(cards);
+
+        }
+
+        threeOfAKind = (cards) => {
+
+            for(let eachcard of cards){
+
+                let res = this.rankCount(eachcard);
+                if(res === 3){
+                    return true;
+                }
+
+            }
+            return false;
+
+        }
+
 
     /*
 
