@@ -187,7 +187,11 @@ class MainPage extends React.Component{
 
         }
 
-        
+        flush = (cards) => {
+
+            return this.sameSuit(cards);
+
+        }
 
 
     /*
