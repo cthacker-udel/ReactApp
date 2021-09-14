@@ -159,8 +159,6 @@ class MainPage extends React.Component{
 
         fourOfAKind = (cards) => {
 
-            let theKinds = [];
-
             for(let eachcard of cards){
 
                 let cnt = this.rankCount(eachcard,cards);
@@ -222,10 +220,16 @@ class MainPage extends React.Component{
         twoPairs = (cards) => {
 
             let cnt = 0;
+            let rankSet = new Set();
             for(let eachcard of cards){
 
                 let rank = eachcard.replace('hearts','').replace('spades','').replace('diamonds','').replace('clubs','');
-                let res = this.rankCount(rank,cards);
+                rankSet.add(rank);
+
+            }
+            for(let eachrank of rankSet){
+
+                let res = this.rankCount(eachrank,cards);
                 if(res === 2){
                     cnt++;
                 }
@@ -234,6 +238,22 @@ class MainPage extends React.Component{
             return cnt === 2;
 
         }
+
+        onePair = (cards) => {
+
+            for(let eachcard of cards){
+
+                let rank = eachcard.replace('hearts','').replace('spades','').replace('diamonds','').replace('clubs','');
+                if(this.rankCount(rank,cards) === 2){
+                    return true;
+                }
+
+            }
+            return false;
+
+        }
+
+
 
         cardCombos = (cards) => {
 
@@ -246,6 +266,7 @@ class MainPage extends React.Component{
                 5 - flush
                 6 - straight
                 7 - three of a kind
+                8 - two pairs
 
             */
 
@@ -271,6 +292,12 @@ class MainPage extends React.Component{
             }
             else if(this.threeOfAKind(cards)){
                 res = 7;
+            }
+            else if(this.twoPairs(cards)){
+                res = 8;
+            }
+            else if(this.onePair(cards)){
+                res = 9;
             }
             return res;
 
