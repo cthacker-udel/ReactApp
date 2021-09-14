@@ -89,7 +89,7 @@ class MainPage extends React.Component{
         }
         
         consecutive = (cards) => {
-        
+
             let ranks = {'ace': 14, 'king': 13, 'queen': 12, 'jack': 11, 'ten': 10, 'nine': 9, 'eight': 8, 'seven': 7, 'six': 6, 'five': 5, 'four': 4, 'three': 3, 'two': 2};
         
             let theNumRanks = [];
@@ -98,21 +98,30 @@ class MainPage extends React.Component{
                 for(let j of Object.keys(ranks)){
                     if(theCard.includes(j)){
                         theNumRanks.push(ranks[j]);
+                        break;
                     }
                 }
             }
         
             theNumRanks.sort((a,b) => a-b);
+            theNumRanks = [...new Set(theNumRanks)];
+            let cnt = 0;
             for(let i = 0; i < theNumRanks.length-1; i++){
         
                 let iRank = theNumRanks[i];
                 let jRank = theNumRanks[i+1];
-                if(Math.abs(iRank - jRank) !== 1){
-                    return false;
+                if(Math.abs(iRank - jRank) === 1){
+                    cnt++;
+                }
+                else if(cnt === 4){
+                    return true;
+                }
+                else if(Math.abs(iRank - jRank) !== 1){
+                    cnt = 0;
                 }
         
             }
-            return true;
+            return false;
         
         }
         
@@ -362,7 +371,7 @@ class MainPage extends React.Component{
 
     tableCardsInit = () => {
 
-        if(this.state.tableCards.length === 5){
+        if(this.state.tableCards.length === 10){
             // max amt of cards
             return;
         }
