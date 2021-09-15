@@ -10,10 +10,23 @@ import Badge from 'react-bootstrap/Badge'
 
 function Board(props){
 
+    const [theGuesses,setTestState] = useState(props.theCompGuesses);
 
     const printOut = (event) => {
 
-        console.log(event.target.name); // acquire button name that is pressed
+        //console.log(event.target.name); // acquire button name that is pressed
+
+        let guess = event.target.name;
+        console.log(`guesses2 = ${theGuesses}`);
+        if(theGuesses.includes(guess)){
+            // valid hit
+            console.log(`hit!`);
+            document.getElementById(guess).setAttribute('variant','outline-danger');
+            props.updateHits(props.numHits+1);
+        }
+        else{
+            console.log(`miss!`);
+        }
         
     }
 
@@ -27,12 +40,8 @@ function Board(props){
 
     }
 
-    console.log(`props = ${props['theOptions']}`);
-
     const [spaces,setSpaces] = useState(props['theOptions']);
     const [computerChoices,setComputerChoices] = useState('');
-
-    console.log(`spaces = ${spaces}`);
 
     return(
 
@@ -198,11 +207,15 @@ function MainPage(){
     // the user determining the board size rather than default 5x5, also maybe add implementation so instead of picking 5 random points separately, they are conjoined
     // together to form a "ship"
 
-    let compGuess = [options[0][Math.random() * (4)]
-                        ,options[1][Math.random() * 4]
-                        ,options[2][Math.random() * 4]
-                        ,options[3][Math.random() * 4]
-                        ,options[4][Math.random() * 4]];
+    // really odd behavior when using random numbers, they would change from here to being passed to the board, unsure why, and then when I called set hits in the board func,
+    // it would edit the random numbers as well
+
+    const compGuess = [options[0][0]
+                        ,options[1][1]
+                        ,options[2][2]
+                        ,options[3][3]
+                        ,options[4][4]
+                    ];
 
     const[computerGuess,setComputerGuess] = useState(compGuess);
 
@@ -210,6 +223,7 @@ function MainPage(){
     const [hits,setHits] = useState(0);
     const [sank,setSank] = useState(0);
 
+    console.log(`compguess = ${compGuess}`);
 
     return(
         <>
@@ -217,7 +231,7 @@ function MainPage(){
 
                 <Col>
 
-                <Board theOptions={options} theCompGuesses={computerGuess}/>
+                <Board theOptions={options} theCompGuesses={computerGuess} updateHits={setHits} updateSank={setSank} updateMisses={setMisses} numHits={hits} numMisses={misses} numSank={sank}/>
 
                 </Col>
 
@@ -230,12 +244,12 @@ function MainPage(){
                 </Col>
                 <Col>
 
-                    <Badge bg="primary" id="hitsbage">Hits : 0</Badge>
+                    <Badge bg="primary" id="hitsbadge">Hits : 0</Badge>
 
                 </Col>
                 <Col>
 
-                    <Badge bg="primary" id="shipsank">Sank : 0</Badge>
+                    <Badge bg="primary" id="sankBadge">Sank : 0</Badge>
 
                 </Col>
             </Row>
