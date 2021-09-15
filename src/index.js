@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import ReactDOM, { render } from 'react-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Button from 'react-bootstrap/Button';
@@ -7,156 +7,119 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import { isTrivialHref } from '@restart/ui/esm/Button';
+import ButtonGroup from 'react-bootstrap/ButtonGroup';
+
+function LeftText(props){
+
+    return(
 
 
-class LeftText extends React.Component{
+        <Form>
 
-    constructor(props){
-        super(props);
-    }
-
-    render(){
-        
-        return(
-            <Form>
-
-                <Form.Group className="leftText" controlId="rightoperand" onChange={this.props.onChange}>
+                <Form.Group className="leftText" controlId="rightoperand" onChange={props.onChange}>
 
                     <Form.Label>Left Number</Form.Label>
-                    <Form.Control type="number" placeholder={this.props.val} name={this.props.name}></Form.Control>
-                    <Form.Text>Left operand such as {this.props.val} + 10 = {Number(this.props.val) + 10}</Form.Text>
+                    <Form.Control type="number" placeholder={props.val} name={props.name}></Form.Control>
+                    <Form.Text>Left operand such as {props.val} + 10 = {Number(props.val) + 10}</Form.Text>
 
                 </Form.Group>
 
-            </Form>
-        );
-
-    }
-
-}
+        </Form>
 
 
-class RightText extends React.Component{
-
-    constructor(props){
-        super(props);
-
-    }
-
-    render(){
-
-        return(
-            <Form>
-
-                <Form.Group className="rightText" controlId="rightoperand" onChange={this.props.onChange}>
-
-                    <Form.Label>Right Number</Form.Label>
-                    <Form.Control type="number" placeholder={this.props.val} name={this.props.name}></Form.Control>
-                    <Form.Text>Right operand such as 10 + {this.props.val} = {Number(this.props.val) + 10}</Form.Text>
-
-                </Form.Group>
-
-            </Form>
-        );
-
-    }
+    );
 
 }
 
+function RightText(props){
 
-class EquateButton extends React.Component{
+    return(
+        <Form>
 
-    constructor(props){
-        super(props);
-    }
+            <Form.Group className="rightText" controlId="rightoperand" onChange={props.onChange}>
 
-    render(){
+                <Form.Label>Right Number</Form.Label>
+                <Form.Control type="number" placeholder={props.val} name={props.name}></Form.Control>
+                <Form.Text>Right operand such as 10 + {props.val} = {Number(props.val) + 10}</Form.Text>
 
-        return(
-            <Button variant="success" style={{display: "block",margin: "auto"}}>Calculate</Button>
+            </Form.Group>
+
+        </Form>
         );
-
-    }
 
 }
 
-class OperandType extends React.Component{
+function EquateButton(props){
 
-    constructor(props){
-        super(props);
-    }
 
-    render(){
+    return(
 
-        return(
-            <>
-            <Button variant="outline-dark" onClick={this.props.clickFunc} name="mult">Multiply</Button>
+        <Button variant="success" stlye={{display: "block",margin: "auto",textAlign: "center"}}>Calculate</Button>
+
+    );
+
+
+}
+
+function OperandType(props){
+
+    return(
+    
+        <ButtonGroup vertical>
+
+            <Button variant="outline-dark" onClick={props.clickFunc} name="mult">Multiply</Button>
             <br></br>
-            <Button variant="outline-dark" onClick={this.props.clickFunc} name="add">Add</Button>
+            <Button variant="outline-dark" onClick={props.clickFunc} name="add">Add</Button>
             <br></br>
-            <Button variant="outline-dark" onClick={this.props.clickFunc} name="sub">Subtract</Button>
+            <Button variant="outline-dark" onClick={props.clickFunc} name="sub">Subtract</Button>
             <br></br>
-            <Button variant="outline-dark" onClick={this.props.clickFunc} name="divide">Divide</Button>
+            <Button variant="outline-dark" onClick={props.clickFunc} name="divide">Divide</Button>
             <br></br>
-            <Button variant="outline-dark" onClick={this.props.clickFunc} name="pow">Power</Button>
-            </>
+            <Button variant="outline-dark" onClick={props.clickFunc} name="pow">Power</Button>
+            
 
-        );
+        </ButtonGroup>
 
-    }
 
-}
+    );
 
-class CalculationResult extends React.Component{
-
-    constructor(props){
-        super(props);
-    }
-
-    render(){
-
-        return(
-
-            <Form>
-
-                <Form.Group className="calcResult" controlId="basicCalcResultDisplay">
-
-                    <Form.Label>Calculation Result</Form.Label>
-                    <Form.Control type="text" placeholder={this.props.val}></Form.Control>
-                    <Form.Text className="calculationText">
-                        This displays the result of the calculation
-                    </Form.Text>
-
-                </Form.Group>
-
-            </Form>
-
-        );
-
-    }
 
 }
 
 
-class MainPage extends React.Component{
+function CalculationResult(props){
+
+    return(
+
+        <Form>
+
+            
+            <Form.Group className="calcResult" controlId="basicCalcResultDisplay">
+
+                <Form.Label>Calculation Result</Form.Label>
+                <Form.Control type="text" placeholder={props.val}></Form.Control>
+                <Form.Text className="calculationText">
+                    This displays the result of the calculation
+                </Form.Text>
+
+            </Form.Group>
 
 
-    constructor(props){
+        </Form>
 
-        super(props);
 
-        this.state = {
+    );
 
-            result: 0,
-            leftNum: 0,
-            rightNum: 0,
-            history: [],
+}
 
-        }
+function MainPage(props){
 
-    }
+    const [result,setResult] = useState(0);
+    const [leftNum,setLeftNum] = useState(0);
+    const [rightNum,setRightNum] = useState(0);
+    const [history,setHistory] = useState([]);
 
-    handleChange = (change,event) => {
+    const handleChange = (change,event) => {
 
         console.log(`change = ${change.target.value} and event = ${change.target.name}`);
 
@@ -166,72 +129,68 @@ class MainPage extends React.Component{
         console.log(`thename = ${theName}`);
 
         if(theName === "leftNum"){
-            this.setState({leftNum: theVal});
+            setLeftNum(theVal);
         }
         else{
-            this.setState({rightNum: theVal});
+            setRightNum(theVal);
         }
-
-        console.log(this.state);
 
     }
 
-    handleClick = (event) => {
+    const handleClick = (event) => {
 
         console.log(event);
-        console.log(`leftVal = ${this.state.leftVal} and rightVal = ${this.state.rightVal} and result = ${this.state.result}`);
+        console.log(`leftVal = ${leftNum} and rightVal = ${rightNum} and result = ${result}`);
 
         console.log(`name = ${event.target.name}`);
 
         if(event.target.name === "mult"){
             // multiply
-            const res = +this.state.leftNum * +this.state.rightNum;
-            this.setState({result: res});
+            const res = +leftNum * +rightNum;
+            setResult(res);
         }
         else if(event.target.name === "add"){
             // addition
-            const res = +this.state.leftNum + +this.state.rightNum;
-            this.setState({result: res});
+            const res = +leftNum + +rightNum;
+            setResult(res);
         }
         else if(event.target.name === "divide"){
             // divide
-            if(this.state.rightNum === 0){
+            if(rightNum === 0){
                 const res = "NaN";
-                this.setState({result: res});
+                setResult(res);
             }
             else{
-                const res = +this.state.leftNum / +this.state.rightNum;
-                this.setState({result: res});
+                const res = +leftNum / +rightNum;
+                setResult(res);
             }
         }
         else if(event.target.name === "sub"){
             // subtraction
-            const res = +this.state.leftNum - +this.state.rightNum;
-            this.setState({result: res});
+            const res = +leftNum - +rightNum;
+            setResult(res);
         }
         else if(event.target.name === "pow"){
             // power
-            const res = Number(this.state.leftNum) ** +this.state.rightNum;
-            this.setState({result: res});
+            const res = Number(leftNum) ** +rightNum;
+            setResult(res);
         }
 
     }
 
-    render(){
+    return(
 
-        return(
-            
-            <Container>
+        <Container>
                 <Row>
                     <Col>
-                        <LeftText onChange={this.handleChange} name="leftNum" val={this.state.leftNum}/>
+                        <LeftText onChange={handleChange} name="leftNum" val={leftNum}/>
                     </Col>
                     <Col>
-                        <RightText onChange={this.handleChange} name="rightNum" val={this.state.rightNum}/>
+                        <RightText onChange={handleChange} name="rightNum" val={rightNum}/>
                     </Col>
                     <Col xs={4}>
 
-                        <CalculationResult val={this.state.result}/>
+                        <CalculationResult val={result}/>
 
                     </Col>
                 </Row>
@@ -239,7 +198,7 @@ class MainPage extends React.Component{
                 <Row>
                     <Col>
 
-                        <EquateButton clickFunc={this.handleClick} />
+                        <EquateButton clickFunc={handleClick} />
 
                     </Col>
                 </Row>
@@ -247,20 +206,18 @@ class MainPage extends React.Component{
 
                     <Col>
 
-                        <OperandType clickFunc={this.handleClick}/>
+                        <OperandType clickFunc={handleClick}/>
 
                     </Col>
 
                 </Row>
             </Container>
 
-        );
 
-    }
+    );
+
 
 }
-
-
 
 
 ReactDOM.render(
