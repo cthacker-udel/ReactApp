@@ -12,6 +12,8 @@ function Board(props){
 
     const [theGuesses,setTestState] = useState(props.theCompGuesses);
 
+    const [theColor,setColor] = useState('outline-primary');
+
     const printOut = (event) => {
 
         //console.log(event.target.name); // acquire button name that is pressed
@@ -21,11 +23,13 @@ function Board(props){
         if(theGuesses.includes(guess)){
             // valid hit
             console.log(`hit!`);
-            document.getElementById(guess).setAttribute('variant','outline-danger');
+            document.getElementById(guess).innerHTML = "HIT";
             props.updateHits(props.numHits+1);
         }
         else{
             console.log(`miss!`);
+            document.getElementById(guess).innerHTML = "MISS";
+            props.updateMisses(props.numMisses+1);
         }
         
     }
@@ -34,7 +38,7 @@ function Board(props){
 
         return(
 
-            <Button name={theName} variant="outline-primary" onClick={printOut} id={theName}>{theName}</Button>
+            <Button name={theName} variant={theColor} onClick={printOut} id={theName}>{theName}</Button>
 
         );
 
@@ -225,6 +229,8 @@ function MainPage(){
 
     console.log(`compguess = ${compGuess}`);
 
+    console.log(`hits = ${hits}`);
+
     return(
         <>
             <Row>
@@ -239,17 +245,17 @@ function MainPage(){
             <Row style={{textAlign: "center"}}>
                 <Col>
 
-                    <Badge bg="primary" id="missesBadge">Misses : 0</Badge>
+                    <Badge bg="primary" id="missesBadge">Misses : {misses}</Badge>
 
                 </Col>
                 <Col>
 
-                    <Badge bg="primary" id="hitsbadge">Hits : 0</Badge>
+                    <Badge bg="primary" id="hitsbadge">Hits : {hits}</Badge>
 
                 </Col>
                 <Col>
 
-                    <Badge bg="primary" id="sankBadge">Sank : 0</Badge>
+                    <Badge bg="primary" id="sankBadge">[TO BE IMPLEMENTED]Sank : {sank}</Badge>
 
                 </Col>
             </Row>
