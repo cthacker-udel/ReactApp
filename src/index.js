@@ -61,6 +61,9 @@ function OperandType(props){
             <Button variant="outline-dark" onClick={props.clickFunc} name="sub" >Subtract</Button>
             <Button variant="outline-dark" onClick={props.clickFunc} name="divide" >Divide</Button>
             <Button variant="outline-dark" onClick={props.clickFunc} name="pow" >Power</Button>
+            <Button variant="outline-dark" onClick={props.clickFunc} name="bit&">Bitwise AND</Button>
+            <Button variant="outline-dark" onClick={props.clickFunc} name="bit|">Bitwise OR</Button>
+            <Button variant="outline-dark" onClick={props.clickFunc} name="bit^">Bitwise XOR</Button>
             
 
         </ButtonGroup>
@@ -159,8 +162,29 @@ function MainPage(props){
         console.log(`leftVal = ${leftNum} and rightVal = ${rightNum} and result = ${result}`);
 
         console.log(`name = ${event.target.name}`);
+        
+        if(event.target.name === "bit^"){
 
-        if(event.target.name === "mult"){
+            const res = leftNum ^ rightNum;
+            setResult(res);
+            setHistory(history.concat(`${leftNum} ^ ${rightNum} = ${res}`));
+
+        }
+        else if(event.target.name === "bit&"){
+
+            const res = leftNum & rightNum;
+            setResult(res);
+            setHistory(history.concat(`${leftNum} & ${rightNum} = ${res}`));
+
+        }
+        else if(event.target.name === "bit|"){
+
+            const res = leftNum | rightNum;
+            setResult(res);
+            setHistory(history.concat(`${leftNum} | ${rightNum} = ${res}`));
+
+        }
+        else if(event.target.name === "mult"){
             // multiply
             const res = +leftNum * +rightNum;
             setResult(res);
