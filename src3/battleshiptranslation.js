@@ -10,7 +10,18 @@ import Image from 'react-bootstrap/Image';
 import Table from 'react-bootstrap/Table';
 import Offcanvas from 'react-bootstrap/Offcanvas';
 
-function Board(){
+function Board(props){
+
+
+    const setSpaces = (name) => {
+
+        return(
+
+            <Button theName={name} variant="outline-primary">name</Button>
+
+        );
+
+    }
 
     return(
 
@@ -161,13 +172,17 @@ function NavigationButton(){
 
 function MainPage(){
 
+
+    const [options,setOptions] = useState([['A1','B1','C1','D1','E1'],['A2','B2','C2','D2','E2'],['A3','B3','C3','D3','E3'],['A4','B4','C4','D4','E4'],['A5','B5','C5','D5','E5']]);
+    const [turn,setTurn] = useState(true); // user goes first if true
+
     return(
         <>
             <Row>
 
                 <Col>
 
-                <Board />
+                <Board theOptions={options}/>
 
                 </Col>
 
