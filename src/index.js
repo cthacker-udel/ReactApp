@@ -6,8 +6,9 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
-import { isTrivialHref } from '@restart/ui/esm/Button';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
+import ListGroup from 'react-bootstrap/ListGroup';
+import Badge from 'react-bootstrap/Badge';
 
 function LeftText(props){
 
@@ -49,33 +50,17 @@ function RightText(props){
 
 }
 
-function EquateButton(props){
-
-
-    return(
-
-        <Button variant="success" stlye={{display: "block",margin: "auto",textAlign: "center"}}>Calculate</Button>
-
-    );
-
-
-}
-
 function OperandType(props){
 
     return(
     
-        <ButtonGroup vertical>
+        <ButtonGroup vertical style={{textAlign: "center",display: "block",margin: "auto"}}>
 
             <Button variant="outline-dark" onClick={props.clickFunc} name="mult">Multiply</Button>
-            <br></br>
-            <Button variant="outline-dark" onClick={props.clickFunc} name="add">Add</Button>
-            <br></br>
-            <Button variant="outline-dark" onClick={props.clickFunc} name="sub">Subtract</Button>
-            <br></br>
-            <Button variant="outline-dark" onClick={props.clickFunc} name="divide">Divide</Button>
-            <br></br>
-            <Button variant="outline-dark" onClick={props.clickFunc} name="pow">Power</Button>
+            <Button variant="outline-dark" onClick={props.clickFunc} name="add" >Add</Button>
+            <Button variant="outline-dark" onClick={props.clickFunc} name="sub" >Subtract</Button>
+            <Button variant="outline-dark" onClick={props.clickFunc} name="divide" >Divide</Button>
+            <Button variant="outline-dark" onClick={props.clickFunc} name="pow" >Power</Button>
             
 
         </ButtonGroup>
@@ -83,6 +68,30 @@ function OperandType(props){
 
     );
 
+
+}
+
+function ClearButton(props){
+
+
+    return(
+
+        <>
+            <Button variant="outline-danger" onClick={props.clickFunc}>Clear History</Button>
+        </>
+
+    );
+
+
+}
+
+function HistoryItem(props){
+
+    return(
+        
+        <ListGroup.Item>{props.historyResult}</ListGroup.Item>
+
+    );
 
 }
 
@@ -119,6 +128,13 @@ function MainPage(props){
     const [rightNum,setRightNum] = useState(0);
     const [history,setHistory] = useState([]);
 
+
+    const clearHistory = (event) => {
+
+        setHistory([]);
+
+    }
+
     const handleChange = (change,event) => {
 
         console.log(`change = ${change.target.value} and event = ${change.target.name}`);
@@ -148,32 +164,38 @@ function MainPage(props){
             // multiply
             const res = +leftNum * +rightNum;
             setResult(res);
+            setHistory(history.concat(`${leftNum} * ${rightNum} = ${res}`));
         }
         else if(event.target.name === "add"){
             // addition
             const res = +leftNum + +rightNum;
             setResult(res);
+            setHistory(history.concat(`${leftNum} + ${rightNum} = ${res}`));
         }
         else if(event.target.name === "divide"){
             // divide
             if(rightNum === 0){
                 const res = "NaN";
                 setResult(res);
+                setHistory(history.concat(`${leftNum} / ${rightNum} = ${res}`));
             }
             else{
                 const res = +leftNum / +rightNum;
                 setResult(res);
+                setHistory(history.concat(`${leftNum} / ${rightNum} = ${res}`));
             }
         }
         else if(event.target.name === "sub"){
             // subtraction
             const res = +leftNum - +rightNum;
             setResult(res);
+            setHistory(history.concat(`${leftNum} - ${rightNum} = ${res}`));
         }
         else if(event.target.name === "pow"){
             // power
             const res = Number(leftNum) ** +rightNum;
             setResult(res);
+            setHistory(history.concat(`${leftNum} ^ ${rightNum} = ${res}`));
         }
 
     }
@@ -195,18 +217,41 @@ function MainPage(props){
                     </Col>
                 </Row>
                 <br></br>
-                <Row>
-                    <Col>
-
-                        <EquateButton clickFunc={handleClick} />
-
-                    </Col>
-                </Row>
-                <Row>
+                <Row style={{textAlign: "center",margin: "auto",display: "block"}}>
 
                     <Col>
 
                         <OperandType clickFunc={handleClick}/>
+
+                    </Col>
+
+                </Row>
+                <br />
+                <Row style={{textAlign: "center",margin: "auto",display: "block"}}>
+                    <Col>
+
+                        <ClearButton clickFunc={clearHistory} />
+
+                    </Col>
+                </Row>
+                <br />
+                <Row>
+
+                    <Col>
+                        <Badge bg="primary" style={{textAlign: "center",margin: "auto",display: "block"}}>History</Badge>
+                        <ListGroup>
+
+                            {history.map(e => {
+
+                                return(
+
+                                    <HistoryItem historyResult={e} key={e}/>
+
+                                );
+
+                            })}
+
+                        </ListGroup>
 
                     </Col>
 
