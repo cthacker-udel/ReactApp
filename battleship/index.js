@@ -20,11 +20,22 @@ function Board(props){
 
         let guess = event.target.name;
         console.log(`guesses2 = ${theGuesses}`);
-        if(theGuesses.includes(guess)){
+        console.log(`the hits arr = ${props.theHitsArr}`);
+        if(props.theHitsArr.length === theGuesses.length){
+            console.log(`setting buttons to success`);
+            setColor("success");
+        }
+        else if(props.theHitsArr.includes(guess)){
+            // has already been hit
+            return;
+        }
+        else if(theGuesses.includes(guess)){
             // valid hit
             console.log(`hit!`);
             document.getElementById(guess).innerHTML = "HIT";
             props.updateHits(props.numHits+1);
+            props.updateHitArr(props.theHitsArr.concat(guess));
+            console.log(`the hits arr = ${props.theHitsArr}`);
         }
         else{
             console.log(`miss!`);
@@ -214,11 +225,11 @@ function MainPage(){
     // really odd behavior when using random numbers, they would change from here to being passed to the board, unsure why, and then when I called set hits in the board func,
     // it would edit the random numbers as well
 
-    const compGuess = [options[0][0]
-                        ,options[1][1]
-                        ,options[2][2]
-                        ,options[3][3]
-                        ,options[4][4]
+    const compGuess = [options[Math.floor(Math.random() *(5))][Math.floor(Math.random() *(5))]
+                        ,options[Math.floor(Math.random() *(5))][Math.floor(Math.random() *(5))]
+                        ,options[Math.floor(Math.random() *(5))][Math.floor(Math.random() *(5))]
+                        ,options[Math.floor(Math.random() *(5))][Math.floor(Math.random() *(5))]
+                        ,options[Math.floor(Math.random() *(5))][Math.floor(Math.random() *(5))]
                     ];
 
     const[computerGuess,setComputerGuess] = useState(compGuess);
@@ -226,6 +237,8 @@ function MainPage(){
     const [misses,setMisses] = useState(0);
     const [hits,setHits] = useState(0);
     const [sank,setSank] = useState(0);
+
+    const [hitsArr,setHitsArr] = useState([]);
 
     console.log(`compguess = ${compGuess}`);
 
@@ -237,7 +250,7 @@ function MainPage(){
 
                 <Col>
 
-                <Board theOptions={options} theCompGuesses={computerGuess} updateHits={setHits} updateSank={setSank} updateMisses={setMisses} numHits={hits} numMisses={misses} numSank={sank}/>
+                <Board theOptions={options} theCompGuesses={computerGuess} updateHits={setHits} updateSank={setSank} updateMisses={setMisses} numHits={hits} numMisses={misses} numSank={sank} updateHitArr={setHitsArr} theHitsArr={hitsArr}/>
 
                 </Col>
 
