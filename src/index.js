@@ -15,10 +15,17 @@ function BoardButton(props){
     const [theVariant,setTheVariant] = useState('outline-primary');
     const [team,setTeam] = useState("");
 
+    const coordObj = {'A': 0, 'B': 1, 'C': 2, 'D': 3, 'E': 4, 'F': 5}
+
     const clickFunc = (event) => {
 
         console.log(event.target.name);
-        console.log(hasClicked);
+
+        const theCoord = [parseInt(event.target.name.substring(1))-1,coordObj[event.target.name[0]]];
+
+        console.log(`The coord = ${theCoord}`);
+
+        //console.log(hasClicked);
 
         if(!hasClicked){
             setHasClicked(!hasClicked);
@@ -26,17 +33,29 @@ function BoardButton(props){
                 // players turn
                 setTheVariant('success');
                 setTeam("1");
+                let tmpBoard = props.playerBoard;
+                tmpBoard[theCoord[0],theCoord[1]] = '1';
+                props.setPlayerBoard(tmpBoard);
             }
             else{
                 // computers turn
                 setTheVariant('danger');
                 setTeam("2");
+                let tmpBoard = props.playerBoard;
+                tmpBoard[theCoord[0],theCoord[1]] = '2';
+                props.setPlayerBoard(tmpBoard);
             }
             props.setTheTurn(!props.theTurn);
         }
         else{
             alert('Button has already been clicked');
         }
+
+        let theStr = "";
+        for(let i = 0; i < props.playerBoard.length; i++){
+            theStr += `${props.playerBoard[i][0]}\n`;
+        }
+        console.log(theStr);
 
     }
 
@@ -53,18 +72,18 @@ function Board(){
 
     //[['A1','B1','C1','D1'],['A2','B2','C2','D2'],['A3','B3','C3','D3'],['A4','B4','C4','D4'],['A5','B5','C5','D5']]
 
-    const [choices,setChoices] = useState([['A1','B1','C1','D1','E1','F1'],['A2','B2','C2','D2','E2','F2'],['A3','B3','C3','D3','E3','F3'],['A4','B4','C4','D4','E4','F4'],['A5','B5','C5','D5','E5','F5']]);
+    const [choices,setChoices] = useState([['A1','B1','C1','D1','E1'],['A2','B2','C2','D2','E2'],['A3','B3','C3','D3','E3'],['A4','B4','C4','D4','E4'],['A5','B5','C5','D5','E5']]);
     const [turn,setTurn] = useState(false); // false <-- user turn, true <--- player turn
-    const [theBoard,setBoard] = useState([['','','','','',''],['','','','','',''],['','','','','',''],['','','','','',''],['','','','','','']]);
+    const [board,setBoard] = useState([['','','','','',''],['','','','','',''],['','','','','',''],['','','','','',''],['','','','','','']]);
 
 
     const verifyWinner = (board) => {
 
         // diagonal check
         let playerList = [];
-        for(let i = 0; i < theBoard.length; i++){
+        for(let i = 0; i < board.length; i++){
 
-            for(let j = 0; j < theBoard.length; j++){
+            for(let j = 0; j < board.length; j++){
 
                 // picks coordinates, then check from the coords
                 /*
@@ -83,10 +102,10 @@ function Board(){
                 */
 
                 // [2][2] --> [3][1] --> [4][0]
-                for(let k = i, l = j; k < theBoard.length && l < theBoard.length; k++, l++){
+                for(let k = i, l = j; k < board.length && l < board.length; k++, l++){
 
-                    if(theBoard[k][l] !== ''){
-                        playerList.push(theBoard[k][l]);
+                    if(board[k][l] !== ''){
+                        playerList.push(board[k][l]);
                     }
                     if(new Set(playerList).size > 1){
                         break;
@@ -99,10 +118,10 @@ function Board(){
                 }
                 playerList = [];
 
-                for(let x = i, y = j; x < theBoard.length && y >= 0; x++, y--){
+                for(let x = i, y = j; x < board.length && y >= 0; x++, y--){
 
-                    if(theBoard[x][y] !== ''){
-                        playerList.push(theBoard[x][y]);
+                    if(board[x][y] !== ''){
+                        playerList.push(board[x][y]);
                     }
                     if(new Set(playerList).size > 1){
                         break;
@@ -120,8 +139,8 @@ function Board(){
 
                 for(let x = i; x >= 0; x--){
 
-                    if(theBoard[x][j] !== ''){
-                        playerList.push(theBoard[x][j]);
+                    if(board[x][j] !== ''){
+                        playerList.push(board[x][j]);
                     }
                     if(new Set(playerList).size > 1){
                         break;
@@ -137,10 +156,10 @@ function Board(){
 
                 // right --> [1][1] --> [1][2]
 
-                for(let y = j; y < theBoard.length; y++){
+                for(let y = j; y < board.length; y++){
 
-                    if(theBoard[i][y] !== ''){
-                        playerList.push(theBoard[i][y]);
+                    if(board[i][y] !== ''){
+                        playerList.push(board[i][y]);
                     }
                     if(new Set(playerList).size > 1){
                         break;
@@ -155,12 +174,12 @@ function Board(){
 
                 // down --> [1][1] --> [2][1]
 
-                for(let x = i; x < theBoard.length; x++){
+                for(let x = i; x < board.length; x++){
 
-                    if(theBoard[x][j] !== ''){
-                        playerList.push(theBoard[x][j]);
+                    if(board[x][j] !== ''){
+                        playerList.push(board[x][j]);
                     }
-                    if(new Set(theBoard).size > 1){
+                    if(new Set(board).size > 1){
                         break;
                     }
 
@@ -177,10 +196,10 @@ function Board(){
 
                 for(let y = j; y >= 0; y--){
 
-                    if(theBoard[i][y] !== ''){
-                        playerList.push(theBoard[i][y]);
+                    if(board[i][y] !== ''){
+                        playerList.push(board[i][y]);
                     }
-                    if(new Set(theBoard).size > 1){
+                    if(new Set(board).size > 1){
                         break;
                     }
 
@@ -206,7 +225,7 @@ function Board(){
 
         return(
 
-            <BoardButton theName={value} theTurn={turn} setTheTurn={setTurn}>{value}</BoardButton>
+            <BoardButton theName={value} theTurn={turn} setTheTurn={setTurn}  playerBoard={board} setPlayerBoard={setBoard} >{value}</BoardButton>
 
         );
 
@@ -243,9 +262,6 @@ function Board(){
                                 <th>
                                     E
                                 </th>
-                                <th>
-                                    F
-                                </th>
                             </tr>
                         </thead>
                         <tbody style={{textAlign: "center"}}>
@@ -257,7 +273,6 @@ function Board(){
                                 <td>{generateButton(choices[0][2])}</td>
                                 <td>{generateButton(choices[0][3])}</td>
                                 <td>{generateButton(choices[0][4])}</td>
-                                <td>{generateButton(choices[0][5])}</td>
                             </tr>
                             <tr style={{height: "200px"}}>
                                 <td style={{width: "10px"}}><Badge pill bg="primary">Column 2</Badge></td>
@@ -266,7 +281,6 @@ function Board(){
                                 <td>{generateButton(choices[1][2])}</td>
                                 <td>{generateButton(choices[1][3])}</td>
                                 <td>{generateButton(choices[1][4])}</td>
-                                <td>{generateButton(choices[1][5])}</td>
                             </tr>
                             <tr style={{height: "200px"}}>
                             <td style={{width: "10px"}}><Badge pill bg="primary">Column 3</Badge></td>
@@ -275,7 +289,6 @@ function Board(){
                                 <td>{generateButton(choices[2][2])}</td>
                                 <td>{generateButton(choices[2][3])}</td>
                                 <td>{generateButton(choices[2][4])}</td>
-                                <td>{generateButton(choices[2][5])}</td>
                             </tr>
                             <tr style={{height: "200px"}}>
                             <td style={{width: "10px"}}><Badge pill bg="primary">Column 4</Badge></td>
@@ -284,7 +297,6 @@ function Board(){
                                 <td>{generateButton(choices[3][2])}</td>
                                 <td>{generateButton(choices[3][3])}</td>
                                 <td>{generateButton(choices[3][4])}</td>
-                                <td>{generateButton(choices[3][5])}</td>
                             </tr>
                             <tr style={{height: "200px"}}>
                             <td style={{width: "10px"}}><Badge pill bg="primary">Column 5</Badge></td>
@@ -293,7 +305,6 @@ function Board(){
                                 <td>{generateButton(choices[4][2])}</td>
                                 <td>{generateButton(choices[4][3])}</td>
                                 <td>{generateButton(choices[4][4])}</td>
-                                <td>{generateButton(choices[4][5])}</td>
                             </tr>
 
 
