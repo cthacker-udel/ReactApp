@@ -34,7 +34,7 @@ function BoardButton(props){
                 setTheVariant('success');
                 setTeam("1");
                 let tmpBoard = props.playerBoard;
-                tmpBoard[theCoord[0],theCoord[1]] = '1';
+                tmpBoard[theCoord[0]][theCoord[1]] = '1';
                 props.setPlayerBoard(tmpBoard);
             }
             else{
@@ -42,7 +42,7 @@ function BoardButton(props){
                 setTheVariant('danger');
                 setTeam("2");
                 let tmpBoard = props.playerBoard;
-                tmpBoard[theCoord[0],theCoord[1]] = '2';
+                tmpBoard[theCoord[0]][theCoord[1]] = '2';
                 props.setPlayerBoard(tmpBoard);
             }
             props.setTheTurn(!props.theTurn);
@@ -51,12 +51,14 @@ function BoardButton(props){
             alert('Button has already been clicked');
         }
 
+        props.winnerCheck(props.playerBoard);
+        /*
         let theStr = "";
         for(let i = 0; i < props.playerBoard.length; i++){
-            theStr += `${props.playerBoard[i][0]}\n`;
+            theStr += `${props.playerBoard[i]}\n`;
         }
         console.log(theStr);
-
+        */
     }
 
 
@@ -179,7 +181,7 @@ function Board(){
                     if(board[x][j] !== ''){
                         playerList.push(board[x][j]);
                     }
-                    if(new Set(board).size > 1){
+                    if(new Set(playerList).size > 1){
                         break;
                     }
 
@@ -199,7 +201,7 @@ function Board(){
                     if(board[i][y] !== ''){
                         playerList.push(board[i][y]);
                     }
-                    if(new Set(board).size > 1){
+                    if(new Set(playerList).size > 1){
                         break;
                     }
 
@@ -225,7 +227,7 @@ function Board(){
 
         return(
 
-            <BoardButton theName={value} theTurn={turn} setTheTurn={setTurn}  playerBoard={board} setPlayerBoard={setBoard} >{value}</BoardButton>
+            <BoardButton theName={value} theTurn={turn} setTheTurn={setTurn}  playerBoard={board} setPlayerBoard={setBoard} winnerCheck={verifyWinner}>{value}</BoardButton>
 
         );
 
