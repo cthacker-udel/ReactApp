@@ -8,12 +8,42 @@ import Table from 'react-bootstrap/Table';
 import Offcanvas from 'react-bootstrap/Offcanvas';
 import Badge from 'react-bootstrap/Badge'
 
+
 function BoardButton(props){
+
+    const [hasClicked,setHasClicked] = useState(false);
+    const [theVariant,setTheVariant] = useState('outline-primary');
+
+    const clickFunc = (event) => {
+
+        console.log(event.target.name);
+        console.log(hasClicked);
+
+        if(!hasClicked){
+            setHasClicked(!hasClicked);
+            if(!props.theTurn){
+                // players turn
+                setTheVariant('outline-success');
+            }
+            else{
+                // computers turn
+                setTheVariant('outline-danger');
+            }
+            const theDoc = document.getElementById(event.target.name);
+            console.log(theDoc);
+            console.log(`the turn = ${props.theTurn? "computers": "players"}`);
+            props.setTheTurn(!props.theTurn);
+        }
+        else{
+            alert('Button has already been clicked');
+        }
+
+    }
 
 
     return(
 
-        <Button variant={props.theVariant} onClick={props.clickFunc} name={props.theName}>{props.theName}</Button>
+        <Button variant={theVariant} name={props.theName} onClick={clickFunc} id={props.theName}>{props.theName}</Button>
 
     );
 
@@ -24,21 +54,16 @@ function Board(){
     //[['A1','B1','C1','D1'],['A2','B2','C2','D2'],['A3','B3','C3','D3'],['A4','B4','C4','D4'],['A5','B5','C5','D5']]
 
     const [choices,setChoices] = useState([['A1','B1','C1','D1'],['A2','B2','C2','D2'],['A3','B3','C3','D3'],['A4','B4','C4','D4'],['A5','B5','C5','D5']]);
+    const [turn,setTurn] = useState(false); // false <-- user turn, true <--- player turn
 
-    const clickFunc = (event) => {
-
-        console.log(event.target.name);
-
-    }
 
     const generateButton = (value) => {
 
         return(
 
-            <BoardButton theVariant={"outline-primary"} theName={value} onClick={clickFunc}>{value}</BoardButton>
+            <BoardButton theName={value} theTurn={turn} setTheTurn={setTurn}>{value}</BoardButton>
 
         );
-
 
     }
 
