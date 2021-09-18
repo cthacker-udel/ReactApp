@@ -241,6 +241,10 @@ function Board(){
                 <Col style={{textAlign: "center"}}>
                     <h2><Badge pill bg="secondary">Connect-4</Badge></h2>
                 </Col>
+                <Col>
+                    <h2><Badge pill bg={turn? "danger": "success"}>Current Player</Badge></h2>
+                </Col>
+
             </Row>
             <Row>
                 <Col>
