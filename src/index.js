@@ -244,17 +244,7 @@ function Board(){
 
         return(
 
-            <BoardButton theName={value} theTurn={turn} setTheTurn={setTurn}  playerBoard={board} setPlayerBoard={setBoard} winnerCheck={verifyWinner} clrBoard={clearBoard}>{value}</BoardButton>
-
-        );
-
-    }
-
-    const generateTDButton = (button) => {
-
-        return(
-
-            <td>{button}</td>
+            <td><BoardButton theName={value} theTurn={turn} setTheTurn={setTurn}  playerBoard={board} setPlayerBoard={setBoard} winnerCheck={verifyWinner} clrBoard={clearBoard}>{value}</BoardButton></td>
 
         );
 
@@ -301,43 +291,43 @@ function Board(){
 
                             <tr style={{height: "200px"}}>
                                 <td style={{width: "10px"}}><Badge pill bg="primary">Column 1</Badge></td>
-                                <td>{generateButton(choices[0][0])}</td>
-                                <td>{generateButton(choices[0][1])}</td>
-                                <td>{generateButton(choices[0][2])}</td>
-                                <td>{generateButton(choices[0][3])}</td>
-                                <td>{generateButton(choices[0][4])}</td>
+                                {generateButton(choices[0][0])}
+                                {generateButton(choices[0][1])}
+                                {generateButton(choices[0][2])}
+                                {generateButton(choices[0][3])}
+                                {generateButton(choices[0][4])}
                             </tr>
                             <tr style={{height: "200px"}}>
                                 <td style={{width: "10px"}}><Badge pill bg="primary">Column 2</Badge></td>
-                                <td>{generateButton(choices[1][0])}</td>
-                                <td>{generateButton(choices[1][1])}</td>
-                                <td>{generateButton(choices[1][2])}</td>
-                                <td>{generateButton(choices[1][3])}</td>
-                                <td>{generateButton(choices[1][4])}</td>
+                                {generateButton(choices[1][0])}
+                                {generateButton(choices[1][1])}
+                                {generateButton(choices[1][2])}
+                                {generateButton(choices[1][3])}
+                                {generateButton(choices[1][4])}
                             </tr>
                             <tr style={{height: "200px"}}>
                             <td style={{width: "10px"}}><Badge pill bg="primary">Column 3</Badge></td>
-                                <td>{generateButton(choices[2][0])}</td>
-                                <td>{generateButton(choices[2][1])}</td>
-                                <td>{generateButton(choices[2][2])}</td>
-                                <td>{generateButton(choices[2][3])}</td>
-                                <td>{generateButton(choices[2][4])}</td>
+                                {generateButton(choices[2][0])}
+                                {generateButton(choices[2][1])}
+                                {generateButton(choices[2][2])}
+                                {generateButton(choices[2][3])}
+                                {generateButton(choices[2][4])}
                             </tr>
                             <tr style={{height: "200px"}}>
                             <td style={{width: "10px"}}><Badge pill bg="primary">Column 4</Badge></td>
-                                <td>{generateButton(choices[3][0])}</td>
-                                <td>{generateButton(choices[3][1])}</td>
-                                <td>{generateButton(choices[3][2])}</td>
-                                <td>{generateButton(choices[3][3])}</td>
-                                <td>{generateButton(choices[3][4])}</td>
+                                {generateButton(choices[3][0])}
+                                {generateButton(choices[3][1])}
+                                {generateButton(choices[3][2])}
+                                {generateButton(choices[3][3])}
+                                {generateButton(choices[3][4])}
                             </tr>
                             <tr style={{height: "200px"}}>
                             <td style={{width: "10px"}}><Badge pill bg="primary">Column 5</Badge></td>
-                                <td>{generateButton(choices[4][0])}</td>
-                                <td>{generateButton(choices[4][1])}</td>
-                                <td>{generateButton(choices[4][2])}</td>
-                                <td>{generateButton(choices[4][3])}</td>
-                                <td>{generateButton(choices[4][4])}</td>
+                                {generateButton(choices[4][0])}
+                                {generateButton(choices[4][1])}
+                                {generateButton(choices[4][2])}
+                                {generateButton(choices[4][3])}
+                                {generateButton(choices[4][4])}
                             </tr>
 
 
