@@ -216,8 +216,6 @@ function Board(){
                 }
 
 
-                alert(`No winners detected`);
-                return;
 
             }
 
