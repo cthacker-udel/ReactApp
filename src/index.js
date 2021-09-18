@@ -1,11 +1,10 @@
 import React, {useState} from 'react';
-import ReactDOM, { render } from 'react-dom';
+import ReactDOM from 'react-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Button from 'react-bootstrap/Button';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Table from 'react-bootstrap/Table';
-import Offcanvas from 'react-bootstrap/Offcanvas';
 import Badge from 'react-bootstrap/Badge'
 
 
@@ -55,11 +54,7 @@ function BoardButton(props){
             alert('Button has already been clicked');
         }
 
-        const res = props.winnerCheck(props.playerBoard);
-        if(res){
-            console.log(`clearing board`);
-            props.clrBoard();
-        }
+        props.winnerCheck(props.playerBoard);
         /*
         let theStr = "";
         for(let i = 0; i < props.playerBoard.length; i++){
@@ -86,16 +81,6 @@ function Board(){
     const [turn,setTurn] = useState(false); // false <-- user turn, true <--- player turn
     const [board,setBoard] = useState([['','','','','',''],['','','','','',''],['','','','','',''],['','','','','',''],['','','','','','']]);
 
-    const [row1,setRow1] = useState([])
-
-
-    const clearBoard = () => {
-
-        console.log(`in clear board`);
-        const newBoard = [['','','','','',''],['','','','','',''],['','','','','',''],['','','','','',''],['','','','','','']];
-        setBoard(newBoard);
-
-    }
 
     const verifyWinner = (board) => {
 
@@ -108,17 +93,13 @@ function Board(){
                 // picks coordinates, then check from the coords
                 /*
                             --- diagonals ---
-
                     1) topleft ---> bottom right
                     2) topright --> bottom left
-
                             --- compass directions ---
-
                     1) up
                     2) down
                     3) right
                     4) left
-
                 */
 
                 // [2][2] --> [3][1] --> [4][0]
@@ -134,7 +115,7 @@ function Board(){
                 }
                 if(new Set(playerList).size === 1 && playerList.length >= 4){
                     alert(`Player ${playerList[0]} wins!`);
-                    return true;
+                    return;
                 }
                 playerList = [];
 
@@ -150,7 +131,7 @@ function Board(){
                 }
                 if(new Set(playerList).size === 1 && playerList.length >= 4){
                     alert(`Player ${playerList[0]} wins!`);
-                    return true;
+                    return;
                 }
                 playerList = [];
 
@@ -169,7 +150,7 @@ function Board(){
                 }
                 if(new Set(playerList).size === 1 && playerList.length >= 4){
                     alert(`Player ${playerList[0]} wins!`);
-                    return true;
+                    return;
                 }
                 playerList = [];
 
@@ -188,7 +169,7 @@ function Board(){
                 }
                 if(new Set(playerList).size === 1 && playerList.length >= 4){
                     alert(`Player ${playerList[0]} wins!`);
-                    return true;
+                    return;
                 }
                 playerList = [];
 
@@ -206,7 +187,7 @@ function Board(){
                 }
                 if(new Set(playerList).size === 1 && playerList.length >= 4){
                     alert(`Player ${playerList[0]} wins!`);
-                    return true;
+                    return;
                 }
                 playerList = [];
 
@@ -226,7 +207,7 @@ function Board(){
                 }
                 if(new Set(playerList).size === 1 && playerList.length >= 4){
                     alert(`Player ${playerList[0]} wins!`);
-                    return true;
+                    return;
                 }
 
 
@@ -234,7 +215,6 @@ function Board(){
             }
 
         }
-        return false;
 
 
     }
@@ -244,7 +224,7 @@ function Board(){
 
         return(
 
-            <td><BoardButton theName={value} theTurn={turn} setTheTurn={setTurn}  playerBoard={board} setPlayerBoard={setBoard} winnerCheck={verifyWinner} clrBoard={clearBoard}>{value}</BoardButton></td>
+            <BoardButton theName={value} theTurn={turn} setTheTurn={setTurn}  playerBoard={board} setPlayerBoard={setBoard} winnerCheck={verifyWinner}>{value}</BoardButton>
 
         );
 
@@ -291,43 +271,43 @@ function Board(){
 
                             <tr style={{height: "200px"}}>
                                 <td style={{width: "10px"}}><Badge pill bg="primary">Column 1</Badge></td>
-                                {generateButton(choices[0][0])}
-                                {generateButton(choices[0][1])}
-                                {generateButton(choices[0][2])}
-                                {generateButton(choices[0][3])}
-                                {generateButton(choices[0][4])}
+                                <td>{generateButton(choices[0][0])}</td>
+                                <td>{generateButton(choices[0][1])}</td>
+                                <td>{generateButton(choices[0][2])}</td>
+                                <td>{generateButton(choices[0][3])}</td>
+                                <td>{generateButton(choices[0][4])}</td>
                             </tr>
                             <tr style={{height: "200px"}}>
                                 <td style={{width: "10px"}}><Badge pill bg="primary">Column 2</Badge></td>
-                                {generateButton(choices[1][0])}
-                                {generateButton(choices[1][1])}
-                                {generateButton(choices[1][2])}
-                                {generateButton(choices[1][3])}
-                                {generateButton(choices[1][4])}
+                                <td>{generateButton(choices[1][0])}</td>
+                                <td>{generateButton(choices[1][1])}</td>
+                                <td>{generateButton(choices[1][2])}</td>
+                                <td>{generateButton(choices[1][3])}</td>
+                                <td>{generateButton(choices[1][4])}</td>
                             </tr>
                             <tr style={{height: "200px"}}>
                             <td style={{width: "10px"}}><Badge pill bg="primary">Column 3</Badge></td>
-                                {generateButton(choices[2][0])}
-                                {generateButton(choices[2][1])}
-                                {generateButton(choices[2][2])}
-                                {generateButton(choices[2][3])}
-                                {generateButton(choices[2][4])}
+                                <td>{generateButton(choices[2][0])}</td>
+                                <td>{generateButton(choices[2][1])}</td>
+                                <td>{generateButton(choices[2][2])}</td>
+                                <td>{generateButton(choices[2][3])}</td>
+                                <td>{generateButton(choices[2][4])}</td>
                             </tr>
                             <tr style={{height: "200px"}}>
                             <td style={{width: "10px"}}><Badge pill bg="primary">Column 4</Badge></td>
-                                {generateButton(choices[3][0])}
-                                {generateButton(choices[3][1])}
-                                {generateButton(choices[3][2])}
-                                {generateButton(choices[3][3])}
-                                {generateButton(choices[3][4])}
+                                <td>{generateButton(choices[3][0])}</td>
+                                <td>{generateButton(choices[3][1])}</td>
+                                <td>{generateButton(choices[3][2])}</td>
+                                <td>{generateButton(choices[3][3])}</td>
+                                <td>{generateButton(choices[3][4])}</td>
                             </tr>
                             <tr style={{height: "200px"}}>
                             <td style={{width: "10px"}}><Badge pill bg="primary">Column 5</Badge></td>
-                                {generateButton(choices[4][0])}
-                                {generateButton(choices[4][1])}
-                                {generateButton(choices[4][2])}
-                                {generateButton(choices[4][3])}
-                                {generateButton(choices[4][4])}
+                                <td>{generateButton(choices[4][0])}</td>
+                                <td>{generateButton(choices[4][1])}</td>
+                                <td>{generateButton(choices[4][2])}</td>
+                                <td>{generateButton(choices[4][3])}</td>
+                                <td>{generateButton(choices[4][4])}</td>
                             </tr>
 
 
