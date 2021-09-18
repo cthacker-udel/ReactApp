@@ -25,6 +25,10 @@ function BoardButton(props){
 
         console.log(`The coord = ${theCoord}`);
 
+        for(let i = 0; i < props.playerBoard.length; i++){
+            console.log(props.playerBoard[i]);
+        }
+
         //console.log(hasClicked);
 
         if(!hasClicked){
