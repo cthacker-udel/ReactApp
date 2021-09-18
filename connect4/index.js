@@ -10,6 +10,7 @@ import Badge from 'react-bootstrap/Badge'
 
 function BoardButton(props){
 
+    const [hasClicked,setHasClicked] = useState(false);
     const [theVariant,setTheVariant] = useState('outline-primary');
     const [team,setTeam] = useState("");
 
@@ -29,7 +30,8 @@ function BoardButton(props){
 
         //console.log(hasClicked);
 
-        if(document.getElementById(props.id).className === "btn btn-outline-primary"){
+        if(!hasClicked){
+            setHasClicked(!hasClicked);
             if(!props.theTurn){
                 // players turn
                 setTheVariant('success');
@@ -47,22 +49,12 @@ function BoardButton(props){
                 props.setPlayerBoard(tmpBoard);
             }
             props.setTheTurn(!props.theTurn);
-            let theList = props.btnList;
-            theList = theList.concat(props.id);
-            props.setBtnList(theList);
-            console.log(`updated button list = ${props.btnList}`);
-            
         }
         else{
             alert('Button has already been clicked');
         }
 
-        let result = props.winnerCheck(props.playerBoard);
-        if(result === 1){
-            // wipe the board
-            props.boardWipeFunc(props.id);
-            document.getElementById(props.id).className = "btn btn-outline-primary";
-        }
+        props.winnerCheck(props.playerBoard);
         /*
         let theStr = "";
         for(let i = 0; i < props.playerBoard.length; i++){
@@ -88,26 +80,7 @@ function Board(){
     const [choices,setChoices] = useState([['A1','B1','C1','D1','E1'],['A2','B2','C2','D2','E2'],['A3','B3','C3','D3','E3'],['A4','B4','C4','D4','E4'],['A5','B5','C5','D5','E5']]);
     const [turn,setTurn] = useState(false); // false <-- user turn, true <--- player turn
     const [board,setBoard] = useState([['','','','','',''],['','','','','',''],['','','','','',''],['','','','','',''],['','','','','','']]);
-    const [buttonList,setButtonList] = useState([]);
 
-    const wipeBoard = (winningbtn) => {
-
-        let theList = buttonList;
-        theList.push(winningbtn);
-
-        let newBoard = [['','','','','',''],['','','','','',''],['','','','','',''],['','','','','',''],['','','','','','']];
-        setBoard(newBoard);
-        setTurn(false);
-        for(let eachid of theList){
-            let elem = document.getElementById(eachid);
-            console.log(elem);
-            elem.className = "btn btn-outline-primary";
-            console.log(elem);
-        }
-        setButtonList([]);
-        document.getElementById(winningbtn).className = "btn btn-outline-primary";
-
-    }
 
     const verifyWinner = (board) => {
 
@@ -142,7 +115,7 @@ function Board(){
                 }
                 if(new Set(playerList).size === 1 && playerList.length >= 4){
                     alert(`Player ${playerList[0]} wins!`);
-                    return 1;
+                    return;
                 }
                 playerList = [];
 
@@ -158,7 +131,7 @@ function Board(){
                 }
                 if(new Set(playerList).size === 1 && playerList.length >= 4){
                     alert(`Player ${playerList[0]} wins!`);
-                    return 1;
+                    return;
                 }
                 playerList = [];
 
@@ -177,7 +150,7 @@ function Board(){
                 }
                 if(new Set(playerList).size === 1 && playerList.length >= 4){
                     alert(`Player ${playerList[0]} wins!`);
-                    return 1;
+                    return;
                 }
                 playerList = [];
 
@@ -196,7 +169,7 @@ function Board(){
                 }
                 if(new Set(playerList).size === 1 && playerList.length >= 4){
                     alert(`Player ${playerList[0]} wins!`);
-                    return 1;
+                    return;
                 }
                 playerList = [];
 
@@ -214,7 +187,7 @@ function Board(){
                 }
                 if(new Set(playerList).size === 1 && playerList.length >= 4){
                     alert(`Player ${playerList[0]} wins!`);
-                    return 1;
+                    return;
                 }
                 playerList = [];
 
@@ -234,7 +207,7 @@ function Board(){
                 }
                 if(new Set(playerList).size === 1 && playerList.length >= 4){
                     alert(`Player ${playerList[0]} wins!`);
-                    return 1;
+                    return;
                 }
 
 
@@ -242,7 +215,6 @@ function Board(){
             }
 
         }
-        return 0;
 
 
     }
@@ -252,7 +224,7 @@ function Board(){
 
         return(
 
-            <BoardButton theName={value} theTurn={turn} setTheTurn={setTurn}  playerBoard={board} setPlayerBoard={setBoard} winnerCheck={verifyWinner} id={value} setBtnList={setButtonList} btnList={buttonList} boardWipeFunc={wipeBoard}>{value}</BoardButton>
+            <BoardButton theName={value} theTurn={turn} setTheTurn={setTurn}  playerBoard={board} setPlayerBoard={setBoard} winnerCheck={verifyWinner}>{value}</BoardButton>
 
         );
 
