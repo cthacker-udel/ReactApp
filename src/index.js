@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import ReactDOM from 'react-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Button from 'react-bootstrap/Button';
@@ -59,7 +59,10 @@ function BoardButton(props){
             alert('Button has already been clicked');
         }
 
-        props.winnerCheck(props.playerBoard);
+        const winnerRes = props.winnerCheck(props.playerBoard);
+        if(winnerRes === 1 || winnerRes === 2){
+            props.winnerUpdate(winnerRes);
+        }
         /*
         let theStr = "";
         for(let i = 0; i < props.playerBoard.length; i++){
@@ -78,13 +81,6 @@ function BoardButton(props){
 
 }
 
-function clearBoard(props){
-
-    
-
-
-}
-
 function Board(){
 
     //[['A1','B1','C1','D1'],['A2','B2','C2','D2'],['A3','B3','C3','D3'],['A4','B4','C4','D4'],['A5','B5','C5','D5']]
@@ -93,6 +89,30 @@ function Board(){
     const [turn,setTurn] = useState(false); // false <-- user turn, true <--- player turn
     const [board,setBoard] = useState([['','','','','',''],['','','','','',''],['','','','','',''],['','','','','',''],['','','','','','']]);
     const [buttonList,setButtonList] = useState([]);
+    const [winsP1,setWinsP1] = useState(0);
+    const [winsP2,setWinsP2] = useState(0);
+
+    useEffect(() => {
+
+        console.log(`using effect`);
+
+    })
+
+
+    const updateWins = (winner) => {
+
+        if(winner === 1){
+            let winsP1Tmp = winsP1;
+            winsP1Tmp++;
+            setWinsP1(winsP1Tmp);
+        }
+        else if(winner === 2){
+            let winsP2Tmp = winsP2;
+            winsP2Tmp++;
+            setWinsP2(winsP2Tmp);
+        }
+
+    }
 
     const wipeBoard = () => {
 
@@ -146,7 +166,7 @@ function Board(){
                 }
                 if(new Set(playerList).size === 1 && playerList.length >= 4){
                     alert(`Player ${playerList[0]} wins!`);
-                    return 1;
+                    return parseInt(playerList[0]);
                 }
                 playerList = [];
 
@@ -162,7 +182,7 @@ function Board(){
                 }
                 if(new Set(playerList).size === 1 && playerList.length >= 4){
                     alert(`Player ${playerList[0]} wins!`);
-                    return 1;
+                    return parseInt(playerList[0]);
                 }
                 playerList = [];
 
@@ -181,7 +201,7 @@ function Board(){
                 }
                 if(new Set(playerList).size === 1 && playerList.length >= 4){
                     alert(`Player ${playerList[0]} wins!`);
-                    return 1;
+                    return parseInt(playerList[0]);
                 }
                 playerList = [];
 
@@ -200,7 +220,7 @@ function Board(){
                 }
                 if(new Set(playerList).size === 1 && playerList.length >= 4){
                     alert(`Player ${playerList[0]} wins!`);
-                    return 1;
+                    return parseInt(playerList[0]);
                 }
                 playerList = [];
 
@@ -218,7 +238,7 @@ function Board(){
                 }
                 if(new Set(playerList).size === 1 && playerList.length >= 4){
                     alert(`Player ${playerList[0]} wins!`);
-                    return 1;
+                    return parseInt(playerList[0]);
                 }
                 playerList = [];
 
@@ -238,7 +258,7 @@ function Board(){
                 }
                 if(new Set(playerList).size === 1 && playerList.length >= 4){
                     alert(`Player ${playerList[0]} wins!`);
-                    return 1;
+                    return parseInt(playerList[0]);
                 }
 
 
@@ -256,7 +276,7 @@ function Board(){
 
         return(
 
-            <BoardButton theName={value} theTurn={turn} setTheTurn={setTurn}  playerBoard={board} setPlayerBoard={setBoard} winnerCheck={verifyWinner} id={value} setBtnList={setButtonList} btnList={buttonList}>{value}</BoardButton>
+            <BoardButton theName={value} theTurn={turn} setTheTurn={setTurn}  playerBoard={board} setPlayerBoard={setBoard} winnerCheck={verifyWinner} id={value} setBtnList={setButtonList} btnList={buttonList}  winnerUpdate={updateWins}>{value}</BoardButton>
 
         );
 
@@ -272,7 +292,10 @@ function Board(){
                     <h2><Badge pill bg={turn? "danger": "success"}>Current Player</Badge></h2>
                 </Col>
                 <Col style={{textAlign: "center"}}>
-                    <Button variant="primary" onClick={wipeBoard}>Clear board</Button>
+                    <Button variant="dark" onClick={wipeBoard}>Clear board</Button>
+                </Col>
+                <Col>
+                    <h3><Badge pill >{`P1 Wins: ${winsP1} | P2 Wins: ${winsP2}`}</Badge></h3>
                 </Col>
 
             </Row>
