@@ -37,6 +37,7 @@ function BoardButton(props){
                 let tmpBoard = props.playerBoard;
                 tmpBoard[theCoord[0]][theCoord[1]] = '1';
                 props.setPlayerBoard(tmpBoard);
+                document.getElementById(props.id).className = "btn btn-success";
             }
             else{
                 // computers turn
@@ -45,6 +46,7 @@ function BoardButton(props){
                 let tmpBoard = props.playerBoard;
                 tmpBoard[theCoord[0]][theCoord[1]] = '2';
                 props.setPlayerBoard(tmpBoard);
+                document.getElementById(props.id).className = "btn btn-danger";
             }
             props.setTheTurn(!props.theTurn);
             let theList = props.btnList;
