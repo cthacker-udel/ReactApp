@@ -24,8 +24,8 @@ function Board(props){
         if(props.theHitsArr.length === theGuesses.length-1 && !props.theHitsArr.includes(event.target.name) && theGuesses.includes(event.target.name)){
             console.log(`setting buttons to success`);
             setColor("outline-success");
-            console.log(`props.wins = ${props.wins}`);
-            let currWins = props.wins+1;
+            console.log(`props.wins = ${props.numWins}`);
+            let currWins = props.numWins+1;
             console.log(`currWins = ${currWins}`);
             props.updateWins(currWins);
         }
@@ -228,10 +228,24 @@ function MainPage(){
         let randNums = [];
         let x = 0;
         let y = 0;
+        let fndPair = false;
         do{
             x = Math.floor(Math.random() *(5));
             y = Math.floor(Math.random() *(5));
-            if(!randNums.includes([x,y])){
+            for(let i = 0; i < randNums.length; i++){
+                let eachpair = randNums[i];
+                if(eachpair[0] === x && eachpair[1] === y){
+                    fndPair = true;
+                    break;
+                }
+                else{
+                    fndPair = false;
+                }
+            }
+            if(fndPair){
+                continue;
+            }
+            else{
                 randNums.push([x,y]);
             }
         }while(randNums.length !== 5);
