@@ -2,290 +2,314 @@ import React, {useState} from 'react';
 import ReactDOM, { render } from 'react-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Button from 'react-bootstrap/Button';
-import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import Form from 'react-bootstrap/Form';
-import ButtonGroup from 'react-bootstrap/ButtonGroup';
-import ListGroup from 'react-bootstrap/ListGroup';
-import Badge from 'react-bootstrap/Badge';
+import Table from 'react-bootstrap/Table';
+import Offcanvas from 'react-bootstrap/Offcanvas';
+import Badge from 'react-bootstrap/Badge'
 
-function LeftText(props){
+function Board(props){
 
-    return(
+    const [theGuesses,setTheGuesses] = useState(props.theCompGuesses);
+
+    const [theColor,setColor] = useState('outline-primary');
+
+    const printOut = (event) => {
+
+        //console.log(event.target.name); // acquire button name that is pressed
+
+        let guess = event.target.name;
+        console.log(`guesses2 = ${theGuesses}`);
+        console.log(`the hits arr = ${props.theHitsArr}`);
+        if(props.theHitsArr.length === theGuesses.length-1 && !props.theHitsArr.includes(event.target.name) && theGuesses.includes(event.target.name)){
+            console.log(`setting buttons to success`);
+            setColor("outline-success");
+            console.log(`props.wins = ${props.wins}`);
+            let currWins = props.wins+1;
+            console.log(`currWins = ${currWins}`);
+            props.updateWins(currWins);
+        }
+        else if(props.theHitsArr.includes(guess)){
+            // has already been hit
+            return;
+        }
+        else if(theGuesses.includes(guess)){
+            // valid hit
+            console.log(`hit!`);
+            document.getElementById(guess).innerHTML = "HIT";
+            document.getElementById(guess).className = "btn btn-success";
+            props.updateHits(props.numHits+1);
+            props.updateHitArr(props.theHitsArr.concat(guess));
+            console.log(`the hits arr = ${props.theHitsArr}`);
+        }
+        else{
+            console.log(`miss!`);
+            document.getElementById(guess).innerHTML = "MISS";
+            document.getElementById(guess).className = "btn btn-danger";
+            props.updateMisses(props.numMisses+1);
+        }
+        
+    }
+
+    const generateSpace = (theName) => {
 
 
-        <Form>
+        return(
 
-                <Form.Group className="leftText" controlId="rightoperand" onChange={props.onChange}>
+            <Button name={theName} variant={theColor} onClick={printOut} id={theName}>{theName}</Button>
 
-                    <Form.Label>Left Number</Form.Label>
-                    <Form.Control type="number" placeholder={props.val} name={props.name}></Form.Control>
-                    <Form.Text>Left operand such as {props.val} + 10 = {Number(props.val) + 10}</Form.Text>
-
-                </Form.Group>
-
-        </Form>
-
-
-    );
-
-}
-
-function RightText(props){
-
-    return(
-        <Form>
-
-            <Form.Group className="rightText" controlId="rightoperand" onChange={props.onChange}>
-
-                <Form.Label>Right Number</Form.Label>
-                <Form.Control type="number" placeholder={props.val} name={props.name}></Form.Control>
-                <Form.Text>Right operand such as 10 + {props.val} = {Number(props.val) + 10}</Form.Text>
-
-            </Form.Group>
-
-        </Form>
         );
 
-}
+    }
 
-function OperandType(props){
-
-    return(
-    
-        <ButtonGroup vertical style={{textAlign: "center",display: "block",margin: "auto"}}>
-
-            <Button variant="outline-dark" onClick={props.clickFunc} name="mult">Multiply</Button>
-            <Button variant="outline-dark" onClick={props.clickFunc} name="add" >Add</Button>
-            <Button variant="outline-dark" onClick={props.clickFunc} name="sub" >Subtract</Button>
-            <Button variant="outline-dark" onClick={props.clickFunc} name="divide" >Divide</Button>
-            <Button variant="outline-dark" onClick={props.clickFunc} name="pow" >Power</Button>
-            <Button variant="outline-dark" onClick={props.clickFunc} name="bit&">Bitwise AND</Button>
-            <Button variant="outline-dark" onClick={props.clickFunc} name="bit|">Bitwise OR</Button>
-            <Button variant="outline-dark" onClick={props.clickFunc} name="bit^">Bitwise XOR</Button>
-            
-
-        </ButtonGroup>
-
-
-    );
-
-
-}
-
-function ClearButton(props){
-
+    const [spaces,setSpaces] = useState(props['theOptions']);
+    const [computerChoices,setComputerChoices] = useState('');
 
     return(
 
         <>
-            <Button variant="outline-danger" onClick={props.clickFunc}>Clear History</Button>
+
+        <Table striped bordered hover size="sm" id="battleshiptable">
+
+            <thead>
+                <tr style={{textAlign: "center"}}>
+                    <th>A</th>
+                    <th>B</th>
+                    <th>C</th>
+                    <th>D</th>
+                    <th>E</th>
+                </tr>
+            </thead>
+            <tbody style={{textAlign: "center"}}>
+                <tr style={{height: "200px"}}>
+                    <td>
+                        {generateSpace(spaces[0][0])}
+                    </td>
+                    <td>
+                        {generateSpace(spaces[0][1])}
+                    </td>
+                    <td>
+                        {generateSpace(spaces[0][2])}
+                    </td>
+                    <td>
+                        {generateSpace(spaces[0][3])}
+                    </td>
+                    <td>
+                        {generateSpace(spaces[0][4])}
+                    </td>
+                </tr>
+                <tr style={{height: "200px"}}>
+                    <td>
+                        {generateSpace(spaces[1][0])}
+                    </td>
+                    <td>
+                        {generateSpace(spaces[1][1])}
+                    </td>
+                    <td>
+                        {generateSpace(spaces[1][2])}
+                    </td>
+                    <td>    
+                        {generateSpace(spaces[1][3])}
+                    </td>
+                    <td>
+                        {generateSpace(spaces[1][4])}
+                    </td>
+                </tr>
+                <tr style={{height: "200px"}}>
+                    <td>
+                        {generateSpace(spaces[2][0])}
+                    </td>
+                    <td>
+                        {generateSpace(spaces[2][1])}
+                    </td>
+                    <td>
+                        {generateSpace(spaces[2][2])}
+                    </td>
+                    <td>
+                        {generateSpace(spaces[2][3])}
+                    </td>
+                    <td>
+                        {generateSpace(spaces[2][4])}
+                    </td>
+                </tr>
+                <tr style={{height: "200px"}}>
+                    <td>
+                        {generateSpace(spaces[3][0])}
+                    </td>
+                    <td>
+                        {generateSpace(spaces[3][1])}
+                    </td>
+                    <td>
+                        {generateSpace(spaces[3][2])}
+                    </td>
+                    <td>
+                        {generateSpace(spaces[3][3])}
+                    </td>
+                    <td>
+                        {generateSpace(spaces[3][4])}
+                    </td>
+                </tr>
+                <tr style={{height: "200px"}}>
+                    <td>
+                        {generateSpace(spaces[4][0])}
+                    </td>
+                    <td>
+                        {generateSpace(spaces[4][1])}
+                    </td>
+                    <td>
+                        {generateSpace(spaces[4][2])}
+                    </td>
+                    <td>
+                        {generateSpace(spaces[4][3])}
+                    </td>
+                    <td>
+                        {generateSpace(spaces[4][4])}
+                    </td>
+                </tr>
+            </tbody>
+
+        </Table>
+
         </>
 
     );
 
-
 }
 
-function HistoryItem(props){
+function NavigationButton(){
+
+    const [show,setShow] = useState(false);
+
+    const handleShow = () => setShow(true);
+    const handleClose = () => setShow(false);
 
     return(
-        
-        <ListGroup.Item>{props.historyResult}</ListGroup.Item>
+
+        <>
+            <Button variant="primary" onClick={handleShow} style={{margin: "auto", display: "block", textAlign: "center"}}>
+                Main Menu
+            </Button>
+
+            <Offcanvas show={show} onHide={handleClose} scroll={true}>
+                <Offcanvas.Header closeButton>
+                    <Offcanvas.Title>Main Menu</Offcanvas.Title>
+                </Offcanvas.Header>
+
+                <Offcanvas.Body>
+
+                    <a href="index.html">Back to Main Page</a>
+                    <br />
+                    <a href="poker.jsx">To Poker</a>
+                    <br />
+                    <a href="calculator.jsx">Calculator</a>
+                    <br />
+                    <a href="bootstrapreview.html">Bootstrap Review</a>
+                    <br />
+                    <a href="fullreviews.html">Full reviews - Week 1</a>
+
+                </Offcanvas.Body>
+
+            </Offcanvas>
+        </>
 
     );
 
 }
 
+function MainPage(){
 
-function CalculationResult(props){
+    const theChoices = [['A1','B1','C1','D1','E1'],['A2','B2','C2','D2','E2'],['A3','B3','C3','D3','E3'],['A4','B4','C4','D4','E4'],['A5','B5','C5','D5','E5']];
 
-    return(
+    const [options,setOptions] = useState(theChoices);
+    const [turn,setTurn] = useState(true); // user goes first if true
 
-        <Form>
+    const getCompGuesses = () => {
 
-            
-            <Form.Group className="calcResult" controlId="basicCalcResultDisplay">
-                <Form.Label>Calculation Result</Form.Label>
-                <Form.Control type="text" placeholder={props.val} readOnly></Form.Control>
-                <Form.Text className="calculationText">
-                    This displays the result of the calculation
-                </Form.Text>
-            </Form.Group>
-
-
-        </Form>
-
-
-    );
-
-}
-
-function MainPage(props){
-
-    const [result,setResult] = useState(0);
-    const [leftNum,setLeftNum] = useState(0);
-    const [rightNum,setRightNum] = useState(0);
-    const [history,setHistory] = useState([]);
-
-
-    const clearHistory = (event) => {
-
-        setHistory([]);
-
-    }
-
-    const handleChange = (change,event) => {
-
-        console.log(`change = ${change.target.value} and event = ${change.target.name}`);
-
-        const theName = change.target.name;
-        const theVal = change.target.value;
-
-        console.log(`thename = ${theName}`);
-
-        if(theName === "leftNum"){
-            setLeftNum(theVal);
-        }
-        else{
-            setRightNum(theVal);
-        }
-
-    }
-
-    const handleClick = (event) => {
-
-        console.log(event);
-        console.log(`leftVal = ${leftNum} and rightVal = ${rightNum} and result = ${result}`);
-
-        console.log(`name = ${event.target.name}`);
-        
-        if(event.target.name === "bit^"){
-
-            const res = leftNum ^ rightNum;
-            setResult(res);
-            setHistory(history.concat(`${leftNum} ^ ${rightNum} = ${res}`));
-
-        }
-        else if(event.target.name === "bit&"){
-
-            const res = leftNum & rightNum;
-            setResult(res);
-            setHistory(history.concat(`${leftNum} & ${rightNum} = ${res}`));
-
-        }
-        else if(event.target.name === "bit|"){
-
-            const res = leftNum | rightNum;
-            setResult(res);
-            setHistory(history.concat(`${leftNum} | ${rightNum} = ${res}`));
-
-        }
-        else if(event.target.name === "mult"){
-            // multiply
-            const res = +leftNum * +rightNum;
-            setResult(res);
-            setHistory(history.concat(`${leftNum} * ${rightNum} = ${res}`));
-        }
-        else if(event.target.name === "add"){
-            // addition
-            const res = +leftNum + +rightNum;
-            setResult(res);
-            setHistory(history.concat(`${leftNum} + ${rightNum} = ${res}`));
-        }
-        else if(event.target.name === "divide"){
-            // divide
-            if(rightNum === 0){
-                const res = "NaN";
-                setResult(res);
-                setHistory(history.concat(`${leftNum} / ${rightNum} = ${res}`));
+        let randNums = [];
+        let x = 0;
+        let y = 0;
+        do{
+            x = Math.floor(Math.random() *(5));
+            y = Math.floor(Math.random() *(5));
+            if(!randNums.includes([x,y])){
+                randNums.push([x,y]);
             }
-            else{
-                const res = +leftNum / +rightNum;
-                setResult(res);
-                setHistory(history.concat(`${leftNum} / ${rightNum} = ${res}`));
-            }
+        }while(randNums.length !== 5);
+    
+        let theGuesses = [];
+        for(let eachpair of randNums){
+            theGuesses.push(options[eachpair[0]][eachpair[1]]);
         }
-        else if(event.target.name === "sub"){
-            // subtraction
-            const res = +leftNum - +rightNum;
-            setResult(res);
-            setHistory(history.concat(`${leftNum} - ${rightNum} = ${res}`));
-        }
-        else if(event.target.name === "pow"){
-            // power
-            const res = Number(leftNum) ** +rightNum;
-            setResult(res);
-            setHistory(history.concat(`${leftNum} ^ ${rightNum} = ${res}`));
-        }
-
+        return theGuesses;
+    
     }
 
+    // get computer guesses
+
+    // default to 5 guesses <--- may add difficulty functionality later on (reset board, regenerate guesses) also perhaps add customizable functionality such as 
+    // the user determining the board size rather than default 5x5, also maybe add implementation so instead of picking 5 random points separately, they are conjoined
+    // together to form a "ship"
+
+    // really odd behavior when using random numbers, they would change from here to being passed to the board, unsure why, and then when I called set hits in the board func,
+    // it would edit the random numbers as well
+
+    const compGuess = getCompGuesses();
+
+    const[computerGuess,setComputerGuess] = useState(compGuess);
+
+    const [misses,setMisses] = useState(0);
+    const [hits,setHits] = useState(0);
+    const [wins,setWins] = useState(0);
+
+    console.log(`wins = ${wins}`);
+
+    const [hitsArr,setHitsArr] = useState([]);
+
+    //console.log(`compguess = ${compGuess}`);
+
+    console.log(`hits = ${hits}`);
+
     return(
+        <>
+            <Row style={{textAlign: "center"}}>
+                <Col>
 
-        <Container>
-                <Row>
-                    <Col>
-                        <LeftText onChange={handleChange} name="leftNum" val={leftNum}/>
-                    </Col>
-                    <Col>
-                        <RightText onChange={handleChange} name="rightNum" val={rightNum}/>
-                    </Col>
-                    <Col xs={4}>
+                    <h3><Badge bg="primary" id="missesBadge">Misses : {misses}</Badge></h3>
 
-                        <CalculationResult val={result}/>
+                </Col>
+                <Col>
 
-                    </Col>
-                </Row>
-                <br></br>
-                <Row style={{textAlign: "center",margin: "auto",display: "block"}}>
+                    <h3><Badge bg="primary" id="hitsbadge">Hits : {hits}</Badge></h3>
 
-                    <Col>
+                </Col>
+                <Col>
 
-                        <OperandType clickFunc={handleClick}/>
+                    <h3><Badge bg="primary" id="sankBadge">Wins : {wins}</Badge></h3>
 
-                    </Col>
+                </Col>
+            </Row>
+            <Row>
 
-                </Row>
-                <br />
-                <Row style={{textAlign: "center",margin: "auto",display: "block"}}>
-                    <Col>
+                <Col>
 
-                        <ClearButton clickFunc={clearHistory} />
+                <Board theOptions={options} theCompGuesses={computerGuess} updateHits={setHits} updateWins={setWins} updateMisses={setMisses} numHits={hits} numMisses={misses} numWins={wins} updateHitArr={setHitsArr} theHitsArr={hitsArr}/>
 
-                    </Col>
-                </Row>
-                <br />
-                <Row>
+                </Col>
 
-                    <Col>
-                        <Badge bg="primary" style={{textAlign: "center",margin: "auto",display: "block"}}>History</Badge>
-                        <ListGroup>
+            </Row>
+            <br />
+            <br />
+            <Row>
+                <Col>
 
-                            {history.map(e => {
+                    <NavigationButton/>
 
-                                return(
-
-                                    <HistoryItem historyResult={e} key={e}/>
-
-                                );
-
-                            })}
-
-                        </ListGroup>
-
-                    </Col>
-
-                </Row>
-            </Container>
-
-
+                </Col>
+            </Row>
+        </>
     );
 
-
 }
-
 
 ReactDOM.render(
 
@@ -293,7 +317,6 @@ ReactDOM.render(
 
         <MainPage />
 
-    </React.StrictMode>,
-    document.getElementById('root')
+    </React.StrictMode>, document.getElementById('root')
 
 );
