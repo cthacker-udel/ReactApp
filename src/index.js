@@ -57,12 +57,7 @@ function BoardButton(props){
             alert('Button has already been clicked');
         }
 
-        let result = props.winnerCheck(props.playerBoard);
-        if(result === 1){
-            // wipe the board
-            props.boardWipeFunc(props.id);
-            document.getElementById(props.id).className = "btn btn-outline-primary";
-        }
+        props.winnerCheck(props.playerBoard);
         /*
         let theStr = "";
         for(let i = 0; i < props.playerBoard.length; i++){
@@ -81,6 +76,13 @@ function BoardButton(props){
 
 }
 
+function clearBoard(props){
+
+    
+
+
+}
+
 function Board(){
 
     //[['A1','B1','C1','D1'],['A2','B2','C2','D2'],['A3','B3','C3','D3'],['A4','B4','C4','D4'],['A5','B5','C5','D5']]
@@ -90,10 +92,11 @@ function Board(){
     const [board,setBoard] = useState([['','','','','',''],['','','','','',''],['','','','','',''],['','','','','',''],['','','','','','']]);
     const [buttonList,setButtonList] = useState([]);
 
-    const wipeBoard = (winningbtn) => {
+    const wipeBoard = () => {
+
+        console.log(`the board list is : ${buttonList}`);
 
         let theList = buttonList;
-        theList.push(winningbtn);
 
         let newBoard = [['','','','','',''],['','','','','',''],['','','','','',''],['','','','','',''],['','','','','','']];
         setBoard(newBoard);
@@ -105,7 +108,6 @@ function Board(){
             console.log(elem);
         }
         setButtonList([]);
-        document.getElementById(winningbtn).className = "btn btn-outline-primary";
 
     }
 
@@ -252,7 +254,7 @@ function Board(){
 
         return(
 
-            <BoardButton theName={value} theTurn={turn} setTheTurn={setTurn}  playerBoard={board} setPlayerBoard={setBoard} winnerCheck={verifyWinner} id={value} setBtnList={setButtonList} btnList={buttonList} boardWipeFunc={wipeBoard}>{value}</BoardButton>
+            <BoardButton theName={value} theTurn={turn} setTheTurn={setTurn}  playerBoard={board} setPlayerBoard={setBoard} winnerCheck={verifyWinner} id={value} setBtnList={setButtonList} btnList={buttonList}>{value}</BoardButton>
 
         );
 
@@ -264,8 +266,11 @@ function Board(){
                 <Col style={{textAlign: "center"}}>
                     <h2><Badge pill bg="secondary">Connect-4</Badge></h2>
                 </Col>
-                <Col>
+                <Col style={{textAlign: "center"}}>
                     <h2><Badge pill bg={turn? "danger": "success"}>Current Player</Badge></h2>
+                </Col>
+                <Col style={{textAlign: "center"}}>
+                    <Button variant="primary" onClick={wipeBoard}>Clear board</Button>
                 </Col>
 
             </Row>
