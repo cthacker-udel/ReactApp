@@ -107,13 +107,11 @@ function CalculationResult(props){
 
             
             <Form.Group className="calcResult" controlId="basicCalcResultDisplay">
-
                 <Form.Label>Calculation Result</Form.Label>
-                <Form.Control type="text" placeholder={props.val}></Form.Control>
+                <Form.Control type="text" placeholder={props.val} readOnly></Form.Control>
                 <Form.Text className="calculationText">
                     This displays the result of the calculation
                 </Form.Text>
-
             </Form.Group>
 
 
