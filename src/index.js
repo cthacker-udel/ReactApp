@@ -17,7 +17,6 @@ function Board(props){
     const printOut = (event) => {
 
         //console.log(event.target.name); // acquire button name that is pressed
-
         console.log(`guessesArr = ${props.guessesArr}`);
         let guess = event.target.name;
         console.log(`guesses2 = ${theGuesses}`);
