@@ -18,16 +18,24 @@ function Board(props){
 
         //console.log(event.target.name); // acquire button name that is pressed
 
+        console.log(`guessesArr = ${props.guessesArr}`);
         let guess = event.target.name;
         console.log(`guesses2 = ${theGuesses}`);
         console.log(`the hits arr = ${props.theHitsArr}`);
         if(props.theHitsArr.length === theGuesses.length-1 && !props.theHitsArr.includes(event.target.name) && theGuesses.includes(event.target.name)){
-            console.log(`setting buttons to success`);
-            setColor("outline-success");
-            console.log(`props.wins = ${props.numWins}`);
+            setColor("outline-primary");
             let currWins = props.numWins+1;
-            console.log(`currWins = ${currWins}`);
             props.updateWins(currWins);
+            props.guessesArr.push(event.target.name);
+            for(let eachname of props.guessesArr){
+
+                document.getElementById(eachname).className = "btn btn-outline-primary";
+                document.getElementById(eachname).innerHTML = eachname;
+
+            }
+            props.setGuessesArr([]);
+            props.winProcedure(setTheGuesses);
+            return;
         }
         else if(props.theHitsArr.includes(guess)){
             // has already been hit
@@ -48,6 +56,7 @@ function Board(props){
             document.getElementById(guess).className = "btn btn-danger";
             props.updateMisses(props.numMisses+1);
         }
+        props.guessesArr.push(event.target.name);
         
     }
 
@@ -221,7 +230,6 @@ function MainPage(){
     const theChoices = [['A1','B1','C1','D1','E1'],['A2','B2','C2','D2','E2'],['A3','B3','C3','D3','E3'],['A4','B4','C4','D4','E4'],['A5','B5','C5','D5','E5']];
 
     const [options,setOptions] = useState(theChoices);
-    const [turn,setTurn] = useState(true); // user goes first if true
 
     const getCompGuesses = () => {
 
@@ -267,6 +275,15 @@ function MainPage(){
     // really odd behavior when using random numbers, they would change from here to being passed to the board, unsure why, and then when I called set hits in the board func,
     // it would edit the random numbers as well
 
+    const postWin = (setBoardGuesses) => {
+
+        let guesses = getCompGuesses();
+        setComputerGuess(guesses);
+        setHitsArr([]);
+        setBoardGuesses(guesses);
+
+    }
+
     const compGuess = getCompGuesses();
 
     const[computerGuess,setComputerGuess] = useState(compGuess);
@@ -278,6 +295,8 @@ function MainPage(){
     console.log(`wins = ${wins}`);
 
     const [hitsArr,setHitsArr] = useState([]);
+
+    const [guesses,setGuesses] = useState([]);
 
     //console.log(`compguess = ${compGuess}`);
 
@@ -306,7 +325,7 @@ function MainPage(){
 
                 <Col>
 
-                <Board theOptions={options} theCompGuesses={computerGuess} updateHits={setHits} updateWins={setWins} updateMisses={setMisses} numHits={hits} numMisses={misses} numWins={wins} updateHitArr={setHitsArr} theHitsArr={hitsArr}/>
+                <Board theOptions={options} theCompGuesses={computerGuess} updateHits={setHits} updateWins={setWins} updateMisses={setMisses} numHits={hits} numMisses={misses} numWins={wins} updateHitArr={setHitsArr} theHitsArr={hitsArr} winProcedure={postWin} guessesArr={guesses} setGuessesArr={setGuesses}/>
 
                 </Col>
 
