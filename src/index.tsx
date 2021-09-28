@@ -89,7 +89,7 @@ function ClearButton(props: {clickFunc: React.FormEventHandler<HTMLElement>}): J
 
 }
 
-function HistoryItem(props: any): JSX.Element{
+function HistoryItem(props: {historyResult: string}): JSX.Element{
     // TODO: DECONSTRUCT PROPS TYPE
     return(
         
@@ -100,7 +100,7 @@ function HistoryItem(props: any): JSX.Element{
 }
 
 
-function CalculationResult(props: any): JSX.Element{
+function CalculationResult(props: {val: number}): JSX.Element{
     // TODO: DECONSTRUCT PROPS TYPE
     return(
 
@@ -109,7 +109,7 @@ function CalculationResult(props: any): JSX.Element{
             
             <Form.Group className="calcResult" controlId="basicCalcResultDisplay">
                 <Form.Label>Calculation Result</Form.Label>
-                <Form.Control type="text" placeholder={props.val} readOnly></Form.Control>
+                <Form.Control type="text" placeholder={String(props.val)} readOnly></Form.Control>
                 <Form.Text className="calculationText">
                     This displays the result of the calculation
                 </Form.Text>
@@ -123,7 +123,7 @@ function CalculationResult(props: any): JSX.Element{
 
 }
 
-function MainPage(props: any): JSX.Element{
+function MainPage(): JSX.Element{
     // TODO: DEFINE PROPS
     const [result,setResult] = useState(0);
     const [leftNum,setLeftNum] = useState(0);
