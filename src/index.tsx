@@ -125,9 +125,9 @@ function CalculationResult(props: {val: number}): JSX.Element{
 
 function MainPage(): JSX.Element{
     // TODO: DEFINE PROPS
-    const [result,setResult] = useState(0);
-    const [leftNum,setLeftNum] = useState(0);
-    const [rightNum,setRightNum] = useState(0);
+    const [result,setResult] = useState<number>(0);
+    const [leftNum,setLeftNum] = useState<number>(0);
+    const [rightNum,setRightNum] = useState<number>(0);
     const [history,setHistory]: [string[],(s:string[]) => void] = useState<string[]>([]);
 
 
@@ -137,7 +137,7 @@ function MainPage(): JSX.Element{
 
     }
 
-    const handleChange = (change: React.ChangeEvent<HTMLElement>) => {
+    const handleChange = (change: React.ChangeEvent<HTMLElement>): void => {
 
         let changedElement = change.target as HTMLInputElement;
 
@@ -157,7 +157,7 @@ function MainPage(): JSX.Element{
 
     }
 
-    const handleClick = (event: React.ChangeEvent<HTMLElement>) => {
+    const handleClick = (event: React.ChangeEvent<HTMLElement>): void => {
 
         console.log(event);
         console.log(`leftVal = ${leftNum} and rightVal = ${rightNum} and result = ${result}`);
