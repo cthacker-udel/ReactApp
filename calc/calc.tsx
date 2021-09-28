@@ -33,15 +33,15 @@ function LeftText(props: {val: number, name: string, onChange: React.FormEventHa
 
 }
 
-function RightText(props): JSX.Element{
-
+function RightText(props: {val: number, name: string, onChange: React.FormEventHandler<HTMLElement>}): JSX.Element{
+    // TODO: DECONSTRUCT PROPS TYPE
     return(
         <Form>
 
             <Form.Group className="rightText" controlId="rightoperand" onChange={props.onChange}>
 
                 <Form.Label>Right Number</Form.Label>
-                <Form.Control type="number" placeholder={props.val} name={props.name}></Form.Control>
+                <Form.Control type="number" placeholder={String(props.val)} name={props.name}></Form.Control>
                 <Form.Text>Right operand such as 10 + {props.val} = {Number(props.val) + 10}</Form.Text>
 
             </Form.Group>
@@ -51,8 +51,8 @@ function RightText(props): JSX.Element{
 
 }
 
-function OperandType(props): JSX.Element{
-
+function OperandType(props: {clickFunc: React.FormEventHandler<HTMLElement>}): JSX.Element{
+    // TODO: DECONSTRUCT PROPS TYPE
     return(
     
         <ButtonGroup vertical style={{textAlign: "center",display: "block",margin: "auto"}}>
@@ -75,8 +75,8 @@ function OperandType(props): JSX.Element{
 
 }
 
-function ClearButton(props): JSX.Element{
-
+function ClearButton(props: {clickFunc: React.FormEventHandler<HTMLElement>}): JSX.Element{
+    // TODO: DECONSTRUCT PROPS TYPE
 
     return(
 
@@ -89,8 +89,8 @@ function ClearButton(props): JSX.Element{
 
 }
 
-function HistoryItem(props): JSX.Element{
-
+function HistoryItem(props: {historyResult: string}): JSX.Element{
+    // TODO: DECONSTRUCT PROPS TYPE
     return(
         
         <ListGroup.Item>{props.historyResult}</ListGroup.Item>
@@ -100,8 +100,8 @@ function HistoryItem(props): JSX.Element{
 }
 
 
-function CalculationResult(props): JSX.Element{
-
+function CalculationResult(props: {val: number}): JSX.Element{
+    // TODO: DECONSTRUCT PROPS TYPE
     return(
 
         <Form>
@@ -109,7 +109,7 @@ function CalculationResult(props): JSX.Element{
             
             <Form.Group className="calcResult" controlId="basicCalcResultDisplay">
                 <Form.Label>Calculation Result</Form.Label>
-                <Form.Control type="text" placeholder={props.val} readOnly></Form.Control>
+                <Form.Control type="text" placeholder={String(props.val)} readOnly></Form.Control>
                 <Form.Text className="calculationText">
                     This displays the result of the calculation
                 </Form.Text>
@@ -123,21 +123,21 @@ function CalculationResult(props): JSX.Element{
 
 }
 
-function MainPage(props): JSX.Element{
+function MainPage(): JSX.Element{
+    // TODO: DEFINE PROPS
+    const [result,setResult] = useState<number>(0);
+    const [leftNum,setLeftNum] = useState<number>(0);
+    const [rightNum,setRightNum] = useState<number>(0);
+    const [history,setHistory]: [string[],(s:string[]) => void] = useState<string[]>([]);
 
-    const [result,setResult] = useState(0);
-    const [leftNum,setLeftNum] = useState(0);
-    const [rightNum,setRightNum] = useState(0);
-    const [history,setHistory] = useState([]);
 
-
-    const clearHistory = (event) => {
+    const clearHistory = () => {
 
         setHistory([]);
 
     }
 
-    const handleChange = (change: React.ChangeEvent<HTMLElement>) => {
+    const handleChange = (change: React.ChangeEvent<HTMLElement>): void => {
 
         let changedElement = change.target as HTMLInputElement;
 
@@ -157,47 +157,50 @@ function MainPage(props): JSX.Element{
 
     }
 
-    const handleClick = (event) => {
+    const handleClick = (event: React.ChangeEvent<HTMLElement>): void => {
 
         console.log(event);
         console.log(`leftVal = ${leftNum} and rightVal = ${rightNum} and result = ${result}`);
 
-        console.log(`name = ${event.target.name}`);
+        let changedElement = event.target as HTMLInputElement;
+
+
+        console.log(`name = ${changedElement.name}`);
         
-        if(event.target.name === "bit^"){
+        if(changedElement.name === "bit^"){
 
             const res = leftNum ^ rightNum;
             setResult(res);
             setHistory(history.concat(`${leftNum} ^ ${rightNum} = ${res}`));
 
         }
-        else if(event.target.name === "bit&"){
+        else if(changedElement.name === "bit&"){
 
             const res = leftNum & rightNum;
             setResult(res);
             setHistory(history.concat(`${leftNum} & ${rightNum} = ${res}`));
 
         }
-        else if(event.target.name === "bit|"){
+        else if(changedElement.name === "bit|"){
 
             const res = leftNum | rightNum;
             setResult(res);
             setHistory(history.concat(`${leftNum} | ${rightNum} = ${res}`));
 
         }
-        else if(event.target.name === "mult"){
+        else if(changedElement.name === "mult"){
             // multiply
             const res = +leftNum * +rightNum;
             setResult(res);
             setHistory(history.concat(`${leftNum} * ${rightNum} = ${res}`));
         }
-        else if(event.target.name === "add"){
+        else if(changedElement.name === "add"){
             // addition
             const res = +leftNum + +rightNum;
             setResult(res);
             setHistory(history.concat(`${leftNum} + ${rightNum} = ${res}`));
         }
-        else if(event.target.name === "divide"){
+        else if(changedElement.name === "divide"){
             // divide
             if(rightNum === 0){
                 const res = "NaN";
@@ -210,13 +213,13 @@ function MainPage(props): JSX.Element{
                 setHistory(history.concat(`${leftNum} / ${rightNum} = ${res}`));
             }
         }
-        else if(event.target.name === "sub"){
+        else if(changedElement.name === "sub"){
             // subtraction
             const res = +leftNum - +rightNum;
             setResult(res);
             setHistory(history.concat(`${leftNum} - ${rightNum} = ${res}`));
         }
-        else if(event.target.name === "pow"){
+        else if(changedElement.name === "pow"){
             // power
             const res = Number(leftNum) ** +rightNum;
             setResult(res);
