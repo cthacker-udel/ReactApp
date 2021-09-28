@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, MouseEventHandler} from 'react';
 import ReactDOM from 'react-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Button from 'react-bootstrap/Button';
@@ -29,7 +29,9 @@ function BoardButton(props: {theTurn: boolean, theName: string, setTheTurn: Reac
 
     const coordObj: coords = {'A': 0, 'B': 1, 'C': 2, 'D': 3, 'E': 4, 'F': 5};
 
-    const clickFunc = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const clickFunc = (event: MouseEventHandler<HTMLButtonElement>) => {
+
+        let changedElement = event as HTMLInputElement;
 
         console.log(event.target.name);
 
