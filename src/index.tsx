@@ -1,4 +1,4 @@
-import React, {useState, useEffect, MouseEventHandler} from 'react';
+import React, {useState, useEffect, MouseEventHandler, MouseEvent} from 'react';
 import ReactDOM from 'react-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Button from 'react-bootstrap/Button';
@@ -8,8 +8,9 @@ import Table from 'react-bootstrap/Table';
 import Badge from 'react-bootstrap/Badge'
 
 
-function BoardButton(props: {theTurn: boolean, theName: string, setTheTurn: React.Dispatch<React.SetStateAction<boolean>>, playerBoard: string[][], setPlayerBoard: React.Dispatch<React.SetStateAction<string[][]>>, winnerCheck: (board: string[][]) => number, id: string, setBtnList: React.Dispatch<React.SetStateAction<string[]>>, btnList: string[], winnerUpdate: (winner:number) => void}){
-                                    //<BoardButton theName={value} theTurn={turn} setTheTurn={setTurn}  playerBoard={board} setPlayerBoard={setBoard} winnerCheck={verifyWinner} id={value} setBtnList={setButtonList} btnList={buttonList}  winnerUpdate={updateWins}>{value}</BoardButton>
+function BoardButton(props: {children: string, theTurn: boolean, theName: string, setTheTurn: React.Dispatch<React.SetStateAction<boolean>>, playerBoard: string[][], setPlayerBoard: React.Dispatch<React.SetStateAction<string[][]>>, winnerCheck: (board: string[][]) => number, id: string, setBtnList: React.Dispatch<React.SetStateAction<string[]>>, btnList: string[], winnerUpdate: (winner:number) => void}){
+                                //<BoardButton theName={value} theTurn={turn} setTheTurn={setTurn}  playerBoard={board} setPlayerBoard={setBoard} winnerCheck={verifyWinner} id={value} setBtnList={setButtonList} btnList={buttonList}  winnerUpdate={updateWins}>{value}</BoardButton>
+
     const [theVariant,setTheVariant] = useState<string>('outline-primary');
     const [team,setTeam] = useState<string>("");
 
@@ -29,13 +30,13 @@ function BoardButton(props: {theTurn: boolean, theName: string, setTheTurn: Reac
 
     const coordObj: coords = {'A': 0, 'B': 1, 'C': 2, 'D': 3, 'E': 4, 'F': 5};
 
-    const clickFunc = (event: MouseEventHandler<HTMLButtonElement>) => {
+    const clickFunc = (event: MouseEvent) => {
 
-        let changedElement = event as HTMLInputElement;
+        let changedElement = event.target as HTMLInputElement;
 
-        console.log(event.target.name);
+        console.log(changedElement.name);
 
-        const theCoord = [parseInt(event.target.name.substring(1))-1,coordObj[event.target.name[0]]];
+        const theCoord = [parseInt(changedElement.name.substring(1))-1,coordObj[changedElement.name[0]]];
 
         console.log(`The coord = ${theCoord}`);
 
@@ -45,7 +46,9 @@ function BoardButton(props: {theTurn: boolean, theName: string, setTheTurn: Reac
 
         //console.log(hasClicked);
 
-        if(document.getElementById(props.id) !== null && document.getElementById(props.id).className === "btn btn-outline-primary"){
+        let element: HTMLElement | null = document.getElementById(props.id);
+
+        if(element !== null && element.className === "btn btn-outline-primary"){
             if(!props.theTurn){
                 // players turn
                 setTheVariant('success');
@@ -53,7 +56,7 @@ function BoardButton(props: {theTurn: boolean, theName: string, setTheTurn: Reac
                 let tmpBoard = props.playerBoard;
                 tmpBoard[theCoord[0]][theCoord[1]] = '1';
                 props.setPlayerBoard(tmpBoard);
-                document.getElementById(props.id).className = "btn btn-success";
+                element.className = "btn btn-success";
             }
             else{
                 // computers turn
@@ -62,7 +65,7 @@ function BoardButton(props: {theTurn: boolean, theName: string, setTheTurn: Reac
                 let tmpBoard = props.playerBoard;
                 tmpBoard[theCoord[0]][theCoord[1]] = '2';
                 props.setPlayerBoard(tmpBoard);
-                document.getElementById(props.id).className = "btn btn-danger";
+                element.className = "btn btn-danger";
             }
             props.setTheTurn(!props.theTurn);
             let theList = props.btnList;
@@ -115,7 +118,7 @@ function Board(){
     })
 
 
-    const updateWins = (winner) => {
+    const updateWins = (winner: number) => {
 
         if(winner === 1){
             let winsP1Tmp = winsP1;
@@ -140,9 +143,11 @@ function Board(){
         setBoard(newBoard);
         setTurn(false);
         for(let eachid of theList){
-            let elem = document.getElementById(eachid);
+            let elem: HTMLElement | null = document.getElementById(eachid);
             console.log(elem);
-            elem.className = "btn btn-outline-primary";
+            if(elem !== null){
+                elem.className = "btn btn-outline-primary";
+            }
             console.log(elem);
         }
         setButtonList([]);
