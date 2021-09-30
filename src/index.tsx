@@ -186,12 +186,12 @@ function Board(props: {theOptions: string[][], theCompGuesses: string[], updateH
 
 }
 
-function NavigationButton(){
+function NavigationButton(): JSX.Element{
 
-    const [show,setShow] = useState(false);
+    const [show,setShow] = useState<boolean>(false);
 
-    const handleShow = () => setShow(true);
-    const handleClose = () => setShow(false);
+    const handleShow = () => setShow<boolean>(true);
+    const handleClose = () => setShow<boolean>(false);
 
     return(
 
@@ -226,23 +226,23 @@ function NavigationButton(){
 
 }
 
-function MainPage(){
+function MainPage(): JSX.Element{
 
     const theChoices = [['A1','B1','C1','D1','E1'],['A2','B2','C2','D2','E2'],['A3','B3','C3','D3','E3'],['A4','B4','C4','D4','E4'],['A5','B5','C5','D5','E5']];
 
-    const [options,setOptions] = useState(theChoices);
+    const [options,setOptions] = useState<string[][]>(theChoices);
 
-    const getCompGuesses = () => {
+    const getCompGuesses = (): string[] => {
 
-        let randNums = [];
-        let x = 0;
-        let y = 0;
-        let fndPair = false;
+        let randNums: number[][] = [];
+        let x: number = 0;
+        let y: number = 0;
+        let fndPair: boolean = false;
         do{
             x = Math.floor(Math.random() *(5));
             y = Math.floor(Math.random() *(5));
             for(let i = 0; i < randNums.length; i++){
-                let eachpair = randNums[i];
+                let eachpair: number[] = randNums[i];
                 if(eachpair[0] === x && eachpair[1] === y){
                     fndPair = true;
                     break;
@@ -259,7 +259,7 @@ function MainPage(){
             }
         }while(randNums.length !== 5);
     
-        let theGuesses = [];
+        let theGuesses: string[] = [];
         for(let eachpair of randNums){
             theGuesses.push(options[eachpair[0]][eachpair[1]]);
         }
@@ -285,19 +285,19 @@ function MainPage(){
 
     }
 
-    const compGuess = getCompGuesses();
+    const compGuess: string[] = getCompGuesses();
 
-    const[computerGuess,setComputerGuess] = useState(compGuess);
+    const[computerGuess,setComputerGuess] = useState<string[]>(compGuess);
 
-    const [misses,setMisses] = useState(0);
-    const [hits,setHits] = useState(0);
-    const [wins,setWins] = useState(0);
+    const [misses,setMisses] = useState<number>(0);
+    const [hits,setHits] = useState<number>(0);
+    const [wins,setWins] = useState<number>(0);
 
     console.log(`wins = ${wins}`);
 
-    const [hitsArr,setHitsArr] = useState([]);
+    const [hitsArr,setHitsArr] = useState<string[]>([]);
 
-    const [guesses,setGuesses] = useState([]);
+    const [guesses,setGuesses] = useState<string[]>([]);
 
     //console.log(`compguess = ${compGuess}`);
 
