@@ -356,3 +356,17 @@ export const shuffle = (array: string[]): string[] => {
     }
     return array;
 }
+
+export const computerDecide = (userCards: string[], computerCards: string[]): number => {
+
+    /*
+
+    1) Call
+    2) Raise
+    3) Fold
+
+    */
+
+    return -1;
+
+}
