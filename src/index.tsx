@@ -16,22 +16,29 @@ function Board(props: {theOptions: string[][], theCompGuesses: string[], updateH
 
     const [theColor,setColor] = useState('outline-primary');
 
-    const printOut = (event) => {
+    const printOut = (event: React.ChangeEvent<HTMLElement>) => {
 
         //console.log(event.target.name); // acquire button name that is pressed
+        let changedElement: HTMLInputElement = event.target as HTMLInputElement;
         console.log(`guessesArr = ${props.guessesArr}`);
-        let guess = event.target.name;
+        let guess = changedElement.name;
         console.log(`guesses2 = ${theGuesses}`);
         console.log(`the hits arr = ${props.theHitsArr}`);
-        if(props.theHitsArr.length === theGuesses.length-1 && !props.theHitsArr.includes(event.target.name) && theGuesses.includes(event.target.name)){
+        if(props.theHitsArr.length === theGuesses.length-1 && !props.theHitsArr.includes(changedElement.name) && theGuesses.includes(changedElement.name)){
             setColor("outline-primary");
             let currWins = props.numWins+1;
             props.updateWins(currWins);
-            props.guessesArr.push(event.target.name);
+            props.guessesArr.push(changedElement.name);
             for(let eachname of props.guessesArr){
 
-                document.getElementById(eachname).className = "btn btn-outline-primary";
-                document.getElementById(eachname).innerHTML = eachname;
+                let theDocument: HTMLElement | null = document.getElementById(eachname);
+
+                if(theDocument !== null){
+
+                    theDocument.className = "btn btn-outline-primary";
+                    theDocument.innerHTML = eachname;
+
+                }
 
             }
             props.setGuessesArr([]);
@@ -45,19 +52,25 @@ function Board(props: {theOptions: string[][], theCompGuesses: string[], updateH
         else if(theGuesses.includes(guess)){
             // valid hit
             console.log(`hit!`);
-            document.getElementById(guess).innerHTML = "HIT";
-            document.getElementById(guess).className = "btn btn-success";
+            let theDocument: HTMLElement | null = document.getElementById(guess);
+            if(theDocument !== null){
+                theDocument.innerHTML = "HIT";
+                theDocument.className = "btn btn-success";
+            }
             props.updateHits(props.numHits+1);
             props.updateHitArr(props.theHitsArr.concat(guess));
             console.log(`the hits arr = ${props.theHitsArr}`);
         }
         else{
             console.log(`miss!`);
-            document.getElementById(guess).innerHTML = "MISS";
-            document.getElementById(guess).className = "btn btn-danger";
+            let theDocument: HTMLElement | null = document.getElementById(guess);
+            if(theDocument !== null){
+                theDocument.innerHTML = "MISS";
+                theDocument.className = "btn btn-danger";
+            }
             props.updateMisses(props.numMisses+1);
         }
-        props.guessesArr.push(event.target.name);
+        props.guessesArr.push(changedElement.name);
         
     }
 
