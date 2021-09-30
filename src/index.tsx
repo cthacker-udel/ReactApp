@@ -513,6 +513,7 @@ function MainPage(): JSX.Element{
 
         playerCardsInit();
         computerCardsInit();
+        tableCardsInit();
         if(tableCards.length > 0){
             let res: string[] = [...tableCards,...playerHand];
             console.log(`the hand = ${res}`);
