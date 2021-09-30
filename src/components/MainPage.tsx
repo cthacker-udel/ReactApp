@@ -5,6 +5,7 @@ import {PokerCard} from './PokerCard';
 import {ControlPanel} from './ControlPanel';
 import {shuffle,cardCombos,computerDecide} from '../utilities/PokerMethods';
 import {RaiseForm} from './RaiseForm';
+import { forEachLeadingCommentRange } from 'typescript';
 
 
 export function MainPage(): JSX.Element{
@@ -78,21 +79,27 @@ export function MainPage(): JSX.Element{
     // text of the main button 
     const [mainButtonText,setMainButtonText] = useState<string>("Start Game"); // main button text as string
 
+    // track state of game
+    const [raise,setRaise] = useState<boolean>(false);
+    const [call,setCall] = useState<boolean>(false);
+    const [fold,setFold] = useState<boolean>(false);
+
     useEffect(() => {
 
         // check if turn is players or computers
-        if(!turn){
+        if(!moveSelected){
 
-            alert('Your turn? Call/Fold/Raise?');
+            alert('Your turn? Fold/Call/Raise');
 
         }
         else{
 
-            // computer logic
+            // make computer choose
+
 
         }
 
-    },[turn]);
+    },[moveSelected]);
 
     useEffect(() => {
 
@@ -100,10 +107,36 @@ export function MainPage(): JSX.Element{
 
     },[playerHand,computerHand]);
 
-    const 
+    const callClick = (): void => {
+
+        if(!moveSelected){
+            setCall(true);
+            setMoveSelected(true);
+            alert('User selects call');
+        }
+        else{
+            alert(`Already selected : ${call? "call": fold? "fold": "raise"}`);
+        }
+
+    }
+
+    const foldClick = (): void => {
+
+        if(!moveSelected){
+            setFold(true);
+            alert('User folds');
+            let tmpComputerWins = computerWins;
+            setComputerWins(++tmpComputerWins);
+            let tmpUserLosses = userLosses;
+            setUserLosses(++tmpUserLosses);
+        }
+        else{
+            alert(`Already selected : ${call? "call": fold? "fold": "raise"}`);
+        }
+
+    } 
 
 
-    // put in PokerMethods.tsx
     const drawCards = (isComputer: boolean, deck: string[], setDeck: React.Dispatch<React.SetStateAction<string[]>>, hand: string[], setHand: React.Dispatch<React.SetStateAction<string[]>>, amount: number, setJSXHand: React.Dispatch<React.SetStateAction<JSX.Element[]>>) => {
 
         let cardsDrawn: string[] = [];
@@ -217,7 +250,7 @@ export function MainPage(): JSX.Element{
                         <Col style={{border: "2px dashed black"}}>{thePlayerCards}</Col>
                     </Row>
                     <br />
-                    <ControlPanel theTurn={turn} />
+                    <ControlPanel theTurn={turn} callFunc={callClick} foldFunc={foldClick} />
                     <br />
                     <br />
                     <Row>
