@@ -328,6 +328,12 @@ export const cardCombos = (cards: string[]): number => {
 
 }
 
+const getHighCard = (hand: string[]): number => {
+
+    return hand.map(e => getCardRank(e)).sort((a,b) => a-b)[hand.length-1];
+
+}
+
 
 /*
 
@@ -356,7 +362,7 @@ export const shuffle = (array: string[]): string[] => {
     return array;
 }
 
-export const computerDecide = (userCards: string[], computerCards: string[]): number => {
+export const computerDecide = (userCards: string[], computerCards: string[], tableCards: string[]): number => {
 
     /*
 
@@ -365,6 +371,63 @@ export const computerDecide = (userCards: string[], computerCards: string[]): nu
     3) Fold
 
     */
+
+    let computerHandRank = cardCombos([...computerCards,...tableCards]);
+    let playerHandRank = cardCombos([...userCards,...tableCards]);
+    let randomNumber: number = Math.floor((Math.random()*100)) % Math.floor(Math.random() * 10000);
+
+    if(computerHandRank === 0){
+
+        // check if high card is better than theirs if not, fold
+        if(playerHandRank !== 0){
+            // fold
+            return 2;
+        }
+        else{
+            let compHighCard: number = getHighCard([...computerCards,...tableCards]);
+            let playerHighCard: number = getHighCard([...userCards,...tableCards]);
+            if(compHighCard > playerHighCard){
+                // call
+                return 1;
+            }
+            else{
+                // fold
+                return 3;
+            }
+        }
+
+    }
+    else{
+
+        if(computerHandRank > playerHandRank){
+            // determine whether to call or raise
+            if(randomNumber % 2 === 0){
+                // call
+                return 1;
+            }
+            else{
+                // raise
+                return 2;
+            }
+        }
+        else if(computerHandRank === playerHandRank){
+
+            if(randomNumber % 2 === 0){
+                // call
+                return 1;
+            }
+            else if(randomNumber % 2 !== 0){
+                // raise
+                return 2;
+            }
+            else{
+                // fold
+                return 3;
+            }
+
+        }
+
+    }
 
     return -1;
 

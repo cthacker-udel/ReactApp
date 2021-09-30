@@ -4,8 +4,7 @@ import {Badge, Button, Container, Row, Col} from 'react-bootstrap';
 import {PokerCard} from './PokerCard';
 import {ControlPanel} from './ControlPanel';
 import {shuffle,cardCombos,computerDecide} from '../utilities/PokerMethods';
-import {RaiseForm} from './RaiseForm';
-import { forEachLeadingCommentRange } from 'typescript';
+import {ScoreBoard} from './ScoreBoard';
 
 
 export function MainPage(): JSX.Element{
@@ -84,6 +83,12 @@ export function MainPage(): JSX.Element{
     const [call,setCall] = useState<boolean>(false);
     const [fold,setFold] = useState<boolean>(false);
 
+    /*
+
+            <<<<< USE EFFECTS >>>>>
+
+    */
+
     useEffect(() => {
 
         // check if turn is players or computers
@@ -96,7 +101,6 @@ export function MainPage(): JSX.Element{
 
             // make computer choose
 
-
         }
 
     },[moveSelected]);
@@ -106,6 +110,12 @@ export function MainPage(): JSX.Element{
         setMainButtonText("Deal Table Cards");
 
     },[playerHand,computerHand]);
+
+    /*
+
+            <<<<< USE EFFECTS >>>>>
+
+    */
 
     const callClick = (): void => {
 
@@ -202,12 +212,7 @@ export function MainPage(): JSX.Element{
                         <Col><h1 style={{textAlign: "center"}}>Poker Game</h1></Col>
                     </Row>
                     <Row>
-                        <Col><h5 style={{textAlign: "center"}}>User Wins : {userWins}</h5></Col>
-                        <Col><h5 style={{textAlign: "center"}}>Computer Wins : {computerWins}</h5></Col>
-                        <Col><h5 style={{textAlign: "center"}}>User Chips : {userChips}</h5></Col>
-                        <Col><h5 style={{textAlign: "center"}}>Computer Chips : {computerChips}</h5></Col>
-                        <Col><h5 style={{textAlign: "center"}}>User Losses : {userLosses}</h5></Col>
-                        <Col><h5 style={{textAlign: "center"}}>Computer Losses : {computerLosses}</h5></Col>
+                        <ScoreBoard userWins={userWins} computerWins={computerWins} userChips={userChips} computerChips={computerChips} userLosses={userLosses} computerLosses={computerLosses} />
                     </Row>
                     <Row>
                         <Col><h5 style={{textAlign: "center"}}>Total Chips : {totalChips}</h5></Col>
