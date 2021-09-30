@@ -25,6 +25,7 @@ function PokerCard(props: {cardName: string}): JSX.Element{
 
 function MainPage(): JSX.Element{
 
+
     /*
 
         POKER METHODS
@@ -511,9 +512,9 @@ function MainPage(): JSX.Element{
 
         console.log(`Playerhand = ${playerHand} and computerHand = ${computerHand} and tableCards = ${tableCards}`);
 
+        tableCardsInit();
         playerCardsInit();
         computerCardsInit();
-        tableCardsInit();
         if(tableCards.length > 0){
             let res: string[] = [...tableCards,...playerHand];
             console.log(`the hand = ${res}`);
@@ -531,6 +532,18 @@ function MainPage(): JSX.Element{
     }
 
     console.log(`theplayercards = ${thePlayerCards}`);
+
+    useEffect(() => {
+
+        if(tableCards.length === 5){
+            // end of game
+            let element: HTMLElement | null = document.getElementById('mainButton');
+            if(element !== null){
+                
+            }
+        }
+
+    })
 
     return(
         
