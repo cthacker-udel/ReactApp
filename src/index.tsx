@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, MouseEvent} from 'react';
 import ReactDOM, { render } from 'react-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Button from 'react-bootstrap/Button';
@@ -16,7 +16,7 @@ function Board(props: {theOptions: string[][], theCompGuesses: string[], updateH
 
     const [theColor,setColor] = useState('outline-primary');
 
-    const printOut = (event: React.ChangeEvent<HTMLElement>) => {
+    const printOut = (event: MouseEvent) => {
 
         //console.log(event.target.name); // acquire button name that is pressed
         let changedElement: HTMLInputElement = event.target as HTMLInputElement;
@@ -74,7 +74,7 @@ function Board(props: {theOptions: string[][], theCompGuesses: string[], updateH
         
     }
 
-    const generateSpace = (theName) => {
+    const generateSpace = (theName: string): JSX.Element => {
 
 
         return(
@@ -85,8 +85,8 @@ function Board(props: {theOptions: string[][], theCompGuesses: string[], updateH
 
     }
 
-    const [spaces,setSpaces] = useState(props['theOptions']);
-    const [computerChoices,setComputerChoices] = useState('');
+    const [spaces,setSpaces] = useState<string[][]>(props.theOptions);
+    const [computerChoices,setComputerChoices] = useState<string>('');
 
     return(
 
@@ -203,8 +203,8 @@ function NavigationButton(): JSX.Element{
 
     const [show,setShow] = useState<boolean>(false);
 
-    const handleShow = () => setShow<boolean>(true);
-    const handleClose = () => setShow<boolean>(false);
+    const handleShow = () => setShow(true);
+    const handleClose = () => setShow(false);
 
     return(
 
