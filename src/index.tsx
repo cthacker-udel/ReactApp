@@ -1,363 +1,614 @@
-import React, {useState, MouseEvent} from 'react';
+import React, {useState, useEffect} from 'react';
 import ReactDOM, { render } from 'react-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Button from 'react-bootstrap/Button';
+import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import Table from 'react-bootstrap/Table';
-import Offcanvas from 'react-bootstrap/Offcanvas';
-import Badge from 'react-bootstrap/Badge'
+import Form from 'react-bootstrap/Form';
+import Image from 'react-bootstrap/Image'
 
-function Board(props: {theOptions: string[][], theCompGuesses: string[], updateHits: React.Dispatch<React.SetStateAction<number>>, updateWins: React.Dispatch<React.SetStateAction<number>>, updateMisses: React.Dispatch<React.SetStateAction<number>>, numHits: number, numMisses: number, numWins: number, updateHitArr: React.Dispatch<React.SetStateAction<string[]>>, theHitsArr: string[], winProcedure: (func:React.Dispatch<React.SetStateAction<string[]>>) => void, guessesArr: string[], setGuessesArr: React.Dispatch<React.SetStateAction<string[]>>}){
-        //  TODO: fill out props types
-                                                                                // <Board theOptions={options} theCompGuesses={computerGuess} updateHits={setHits} updateWins={setWins} updateMisses={setMisses} numHits={hits} numMisses={misses} numWins={wins} updateHitArr={setHitsArr} theHitsArr={hitsArr} winProcedure={postWin} guessesArr={guesses} setGuessesArr={setGuesses}/>
 
-    const [theGuesses,setTheGuesses] = useState(props.theCompGuesses);
+function PokerCard(props: {cardName: string}){
 
-    const [theColor,setColor] = useState('outline-primary');
+    return(
 
-    const printOut = (event: MouseEvent) => {
-
-        //console.log(event.target.name); // acquire button name that is pressed
-        let changedElement: HTMLInputElement = event.target as HTMLInputElement;
-        console.log(`guessesArr = ${props.guessesArr}`);
-        let guess = changedElement.name;
-        console.log(`guesses2 = ${theGuesses}`);
-        console.log(`the hits arr = ${props.theHitsArr}`);
-        if(props.theHitsArr.length === theGuesses.length-1 && !props.theHitsArr.includes(changedElement.name) && theGuesses.includes(changedElement.name)){
-            setColor("outline-primary");
-            let currWins = props.numWins+1;
-            props.updateWins(currWins);
-            props.guessesArr.push(changedElement.name);
-            for(let eachname of props.guessesArr){
-
-                let theDocument: HTMLElement | null = document.getElementById(eachname);
-
-                if(theDocument !== null){
-
-                    theDocument.className = "btn btn-outline-primary";
-                    theDocument.innerHTML = eachname;
-
-                }
-
-            }
-            props.setGuessesArr([]);
-            props.winProcedure(setTheGuesses);
-            return;
-        }
-        else if(props.theHitsArr.includes(guess)){
-            // has already been hit
-            return;
-        }
-        else if(theGuesses.includes(guess)){
-            // valid hit
-            console.log(`hit!`);
-            let theDocument: HTMLElement | null = document.getElementById(guess);
-            if(theDocument !== null){
-                theDocument.innerHTML = "HIT";
-                theDocument.className = "btn btn-success";
-            }
-            props.updateHits(props.numHits+1);
-            props.updateHitArr(props.theHitsArr.concat(guess));
-            console.log(`the hits arr = ${props.theHitsArr}`);
-        }
-        else{
-            console.log(`miss!`);
-            let theDocument: HTMLElement | null = document.getElementById(guess);
-            if(theDocument !== null){
-                theDocument.innerHTML = "MISS";
-                theDocument.className = "btn btn-danger";
-            }
-            props.updateMisses(props.numMisses+1);
-        }
-        props.guessesArr.push(changedElement.name);
         
-    }
+        <Image src={`${process.env.PUBLIC_URL}/assets/cards/${props.cardName}.PNG`} style={{height: "100px", width: "100px"}} rounded />
 
-    const generateSpace = (theName: string): JSX.Element => {
-
-
-        return(
-
-            <Button name={theName} variant={theColor} onClick={printOut} id={theName}>{theName}</Button>
-
-        );
-
-    }
-
-    const [spaces,setSpaces] = useState<string[][]>(props.theOptions);
-    const [computerChoices,setComputerChoices] = useState<string>('');
-
-    return(
-
-        <>
-
-        <Table striped bordered hover size="sm" id="battleshiptable">
-
-            <thead>
-                <tr style={{textAlign: "center"}}>
-                    <th>A</th>
-                    <th>B</th>
-                    <th>C</th>
-                    <th>D</th>
-                    <th>E</th>
-                </tr>
-            </thead>
-            <tbody style={{textAlign: "center"}}>
-                <tr style={{height: "200px"}}>
-                    <td>
-                        {generateSpace(spaces[0][0])}
-                    </td>
-                    <td>
-                        {generateSpace(spaces[0][1])}
-                    </td>
-                    <td>
-                        {generateSpace(spaces[0][2])}
-                    </td>
-                    <td>
-                        {generateSpace(spaces[0][3])}
-                    </td>
-                    <td>
-                        {generateSpace(spaces[0][4])}
-                    </td>
-                </tr>
-                <tr style={{height: "200px"}}>
-                    <td>
-                        {generateSpace(spaces[1][0])}
-                    </td>
-                    <td>
-                        {generateSpace(spaces[1][1])}
-                    </td>
-                    <td>
-                        {generateSpace(spaces[1][2])}
-                    </td>
-                    <td>    
-                        {generateSpace(spaces[1][3])}
-                    </td>
-                    <td>
-                        {generateSpace(spaces[1][4])}
-                    </td>
-                </tr>
-                <tr style={{height: "200px"}}>
-                    <td>
-                        {generateSpace(spaces[2][0])}
-                    </td>
-                    <td>
-                        {generateSpace(spaces[2][1])}
-                    </td>
-                    <td>
-                        {generateSpace(spaces[2][2])}
-                    </td>
-                    <td>
-                        {generateSpace(spaces[2][3])}
-                    </td>
-                    <td>
-                        {generateSpace(spaces[2][4])}
-                    </td>
-                </tr>
-                <tr style={{height: "200px"}}>
-                    <td>
-                        {generateSpace(spaces[3][0])}
-                    </td>
-                    <td>
-                        {generateSpace(spaces[3][1])}
-                    </td>
-                    <td>
-                        {generateSpace(spaces[3][2])}
-                    </td>
-                    <td>
-                        {generateSpace(spaces[3][3])}
-                    </td>
-                    <td>
-                        {generateSpace(spaces[3][4])}
-                    </td>
-                </tr>
-                <tr style={{height: "200px"}}>
-                    <td>
-                        {generateSpace(spaces[4][0])}
-                    </td>
-                    <td>
-                        {generateSpace(spaces[4][1])}
-                    </td>
-                    <td>
-                        {generateSpace(spaces[4][2])}
-                    </td>
-                    <td>
-                        {generateSpace(spaces[4][3])}
-                    </td>
-                    <td>
-                        {generateSpace(spaces[4][4])}
-                    </td>
-                </tr>
-            </tbody>
-
-        </Table>
-
-        </>
 
     );
 
-}
-
-function NavigationButton(): JSX.Element{
-
-    const [show,setShow] = useState<boolean>(false);
-
-    const handleShow = () => setShow(true);
-    const handleClose = () => setShow(false);
-
-
-    return(
-
-        <>
-            <Button variant="primary" onClick={handleShow} style={{margin: "auto", display: "block", textAlign: "center"}}>
-                Main Menu
-            </Button>
-
-            <Offcanvas show={show} onHide={handleClose} scroll={true}>
-                <Offcanvas.Header closeButton>
-                    <Offcanvas.Title>Main Menu</Offcanvas.Title>
-                </Offcanvas.Header>
-
-                <Offcanvas.Body>
-
-                    <a href="index.html">Back to Main Page</a>
-                    <br />
-                    <a href="poker.jsx">To Poker</a>
-                    <br />
-                    <a href="calculator.jsx">Calculator</a>
-                    <br />
-                    <a href="bootstrapreview.html">Bootstrap Review</a>
-                    <br />
-                    <a href="fullreviews.html">Full reviews - Week 1</a>
-
-                </Offcanvas.Body>
-
-            </Offcanvas>
-        </>
-
-    );
 
 }
 
-function MainPage(): JSX.Element{
 
-    const theChoices = [['A1','B1','C1','D1','E1'],['A2','B2','C2','D2','E2'],['A3','B3','C3','D3','E3'],['A4','B4','C4','D4','E4'],['A5','B5','C5','D5','E5']];
+function MainPage(){
 
-    const [options,setOptions] = useState<string[][]>(theChoices);
+    /*
 
-    const getCompGuesses = (): string[] => {
+        POKER METHODS
 
-        let randNums: number[][] = [];
-        let x: number = 0;
-        let y: number = 0;
-        let fndPair: boolean = false;
-        do{
-            x = Math.floor(Math.random() *(5));
-            y = Math.floor(Math.random() *(5));
-            for(let i = 0; i < randNums.length; i++){
-                let eachpair: number[] = randNums[i];
-                if(eachpair[0] === x && eachpair[1] === y){
-                    fndPair = true;
-                    break;
+    */
+
+        const royalFlush = (cards: string[]) => {
+
+            let suits = ['hearts','clubs','spades','diamonds'];
+            let ranks = ['ace','king','queen','jack','ten'];
+        
+            let foundMatch = false;
+            for(let i = 0; i < suits.length; i++){
+                foundMatch = true;
+                for(let j = 0; j < ranks.length; j++){
+        
+                    if(cards.includes(`${ranks[j]}${suits[i]}`)){
+                        continue;
+                    }
+                    else{
+                        foundMatch = false;
+                        break;
+                    }
+        
                 }
-                else{
-                    fndPair = false;
+                if(foundMatch){
+                    return true;
                 }
             }
-            if(fndPair){
-                continue;
-            }
-            else{
-                randNums.push([x,y]);
-            }
-        }while(randNums.length !== 5);
-    
-        let theGuesses: string[] = [];
-        for(let eachpair of randNums){
-            theGuesses.push(options[eachpair[0]][eachpair[1]]);
+            return false;
+        
         }
-        return theGuesses;
+        
+        const sameSuit = (cards: string[]) => {
+        
+            let suits = ['hearts','clubs','spades','diamonds'];
+
+            interface suits {
+
+                [index: string]: number
+                'hearts': number
+                'clubs': number
+                'spades': number
+                'diamonds': number
+
+            }
+
+        
+            let theSuits: suits = {'hearts': 0, 'clubs': 0, 'spades': 0, 'diamonds': 0};
+        
+            for(let i = 0; i < cards.length; i++){
+        
+                for(let j of suits){
+                    if(cards[i].includes(j)){
+                        theSuits[j] += 1;
+                    }
+                }
+        
+            }
+            return Object.keys(theSuits).map(e => theSuits[e]).some(e => e >= 5);
+        
+        }
+        
+        const consecutive = (cards: string[]) => {
+
+            interface ranks{
+
+                [index: string]: number
+                'ace': number
+                'king': number
+                'queen': number
+                'jack': number
+                'ten': number
+                'nine': number
+                'eight': number
+                'seven': number
+                'six': number
+                'five': number
+                'four': number
+                'three': number
+                'two': number
+
+            }
+
+
+            let theRanks: ranks = {'ace': 14, 'king': 13, 'queen': 12, 'jack': 11, 'ten': 10, 'nine': 9, 'eight': 8, 'seven': 7, 'six': 6, 'five': 5, 'four': 4, 'three': 3, 'two': 2};
+        
+            let theNumRanks: number[] = [];
+            for(let i = 0; i < cards.length; i++){
+                let theCard = cards[i];
+                for(let j of Object.keys(theRanks)){
+                    if(theCard.includes(j)){
+                        theNumRanks.push(theRanks[j]);
+                        break;
+                    }
+                }
+            }
+        
+            theNumRanks.sort((a,b) => a-b);
+            theNumRanks = [...new Set(theNumRanks)];
+            let cnt = 0;
+            for(let i = 0; i < theNumRanks.length-1; i++){
+        
+                let iRank = theNumRanks[i];
+                let jRank = theNumRanks[i+1];
+                if(Math.abs(iRank - jRank) === 1){
+                    cnt++;
+                }
+                else if(cnt === 4){
+                    return true;
+                }
+                else if(Math.abs(iRank - jRank) !== 1){
+                    cnt = 0;
+                }
+        
+            }
+            return false;
+        
+        }
+        
+        const getCardRank = (card: string): number => {
+        
+            interface theRanks{
+
+                [index: string]: number
+                'ace': number
+                'king': number
+                'queen': number
+                'jack': number
+                'ten': number
+                'nine': number
+                'eight': number
+                'seven': number
+                'six': number
+                'five': number
+                'four': number
+                'three': number
+                'two': number
+
+            }
+
+
+            let ranks: theRanks = {'ace': 14, 'king': 13, 'queen': 12, 'jack': 11, 'ten': 10, 'nine': 9, 'eight': 8, 'seven': 7, 'six': 6, 'five': 5, 'four': 4, 'three': 3, 'two': 2};
+        
+            for(let i of Object.keys(ranks)){
+                if(card.includes(i)){
+                    return ranks[i];
+                }
+            }
+            return -1;
+        
+        }
+        
+        const straightFlush = (cards: string[]) => {
+        
+            if(!sameSuit(cards)){
+                return false;
+            }
+            if(!consecutive(cards)){
+                return false;
+            }
+            cards.sort((a,b) => getCardRank(a) - getCardRank(b));
+        
+        
+        
+        }
+
+        const rankCount = (card: string,cards: string[]) => {
+
+            if(cards === undefined || card === undefined){
+                return 0;
+            }
+
+            cards = cards.map(e => e.replace('hearts','').replace('spades','').replace('diamonds','').replace('clubs',''));
+
+            card = card.replace('hearts','').replace('spades','').replace('diamonds','').replace('clubs','');
+
+            return cards.filter(e => e === card).length;
+
+
+        }
+
+        const fourOfAKind = (cards: string[]) => {
+
+            for(let eachcard of cards){
+
+                let cnt = rankCount(eachcard,cards);
+                if(cnt === 4){
+                    return true;
+                }
+
+            }
+            return false;
+
+        }
+
+        const fullHouse = (cards: string[]) => {
+
+            let found2kind = false;
+            let found3kind = false;
+
+            for(let eachcard of cards){
+
+                let cnt = rankCount(eachcard,cards);
+                if(cnt === 2){
+                    found2kind = true;
+                }
+                else if(cnt === 3){
+                    found3kind = true;
+                }
+
+            }
+            return found2kind && found3kind;
+
+        }
+
+        const flush = (cards: string[]) => {
+
+            return sameSuit(cards);
+
+        }
+
+        const straight = (cards: string[]) => {
+
+            return consecutive(cards);
+
+        }
+
+        const threeOfAKind = (cards: string[]) => {
+
+            for(let eachcard of cards){
+
+                let res = rankCount(eachcard,cards);
+                if(res === 3){
+                    return true;
+                }
+
+            }
+            return false;
+
+        }
+
+        const twoPairs = (cards: string[]) => {
+
+            let cnt = 0;
+            let rankSet = new Set<string>();
+            for(let eachcard of cards){
+
+                let rank = eachcard.replace('hearts','').replace('spades','').replace('diamonds','').replace('clubs','');
+                rankSet.add(rank);
+
+            }
+            for(let eachrank of [...rankSet]){
+
+                let res = rankCount(eachrank,cards);
+                if(res === 2){
+                    cnt++;
+                }
+
+            }
+            return cnt === 2;
+
+        }
+
+        const onePair = (cards: string[]) => {
+
+            for(let eachcard of cards){
+
+                let rank = eachcard.replace('hearts','').replace('spades','').replace('diamonds','').replace('clubs','');
+                if(rankCount(rank,cards) === 2){
+                    return true;
+                }
+
+            }
+            return false;
+
+        }
+
+
+
+        const cardCombos = (cards: string[]) => {
+
+            /*
+
+                1 - royal flush
+                2 - straight flush
+                3 - four of a kind
+                4 - full house
+                5 - flush
+                6 - straight
+                7 - three of a kind
+                8 - two pairs
+
+            */
+
+            let res = 0;
+
+            if(royalFlush(cards)){
+                res = 1;
+            }
+            else if(straightFlush(cards)){
+                res = 2;
+            }
+            else if(fourOfAKind(cards)){
+                res = 3;
+            }
+            else if(fullHouse(cards)){
+                res = 4;
+            }
+            else if(flush(cards)){
+                res = 5;
+            }
+            else if(straight(cards)){
+                res = 6;
+            }
+            else if(threeOfAKind(cards)){
+                res = 7;
+            }
+            else if(twoPairs(cards)){
+                res = 8;
+            }
+            else if(onePair(cards)){
+                res = 9;
+            }
+            return res;
+
+        }
+
+
+    /*
+
+        POKER METHODS
+
+    */
+
+    /* from https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array [first answer] */
+    const shuffle = (array: string[]) => {
+
+        for(let i = 0; i < 10; i++){
+            var currentIndex = array.length,  randomIndex;
+
+            // While there remain elements to shuffle...
+            while (currentIndex !== 0) {
+
+                // Pick a remaining element...
+                randomIndex = Math.floor(Math.random() * currentIndex);
+                currentIndex--;
+
+                // And swap it with the current element.
+                [array[currentIndex], array[randomIndex]] = [
+                array[randomIndex], array[currentIndex]];
+            }
+        }
+        return array;
+    }
+
+    const [cards,setCards] = useState(shuffle(['acehearts','kinghearts','queenhearts','jackhearts','tenhearts','ninehearts','eighthearts','sevenhearts','sixhearts','fivehearts','fourhearts','threehearts',
+                                'twohearts','acediamonds','kingdiamonds','queendiamonds','jackdiamonds','tendiamonds','ninediamonds','eightdiamonds','sevendiamonds','sixdiamonds','fivediamonds',
+                                'fourdiamonds','threediamonds','twodiamonds','acespades','kingspades','queenspades','jackspades','tenspades','ninespades','eightspades','sevenspades',
+                                'sixspades','fivespades','fourspades','threespades','twospades','aceclubs','kingclubs','queenclubs','jackclubs','tenclubs','nineclubs','eightclubs',
+                                'sevenclubs','sixclubs','fiveclubs','fourclubs','threeclubs','twoclubs'
+                                ]));
+
+    const [playerHand,setPlayerHand] = useState<string[]>([]);
+    const [computerHand,setComputerHand] = useState<string[]>([]);
+    const [tableCards,setTableCards] = useState<string[]>([]);
+    const [playerTurn,setPlayerTurn] = useState<boolean>(true);
+    const [chips,setChips] = useState<number>(0);
+    const [gameStarted,setGameStarted] = useState<boolean>(false);
+    const [mainButtonTextBool,setMainButtonTextBool] = useState<boolean>(false);
+    const [thePlayerCards,setThePlayerCards] = useState<JSX.Element[]>([]);
+    const [theTableCards,setTheTableCards] = useState<JSX.Element[]>([]);
+    const [theComputerCards,setTheComputerCards] = useState<JSX.Element[]>([]);
+
+    const determineTurn = (): void => {
+
+        Math.floor(Math.random() * (2) + 0) === 1? setPlayerTurn(true): setPlayerTurn(false);
+
+    }
+
+    const tableCardsInit = () => {
+
+        if(tableCards.length === 5){
+            // max amt of cards
+            return;
+        }
+        let amt = (playerHand.length > 0? 1: 3);
+
+        if(cards.length === 0){
+            return;
+        }
+        let theCards = tableCards;
+        let count = 0;
+        while(count < amt && cards.length > 0){
+            const aStr: string | undefined = cards.pop();
+            if(aStr !== undefined){
+                theCards.push(aStr);
+            }
+            count++;
+        }
+        setTableCards(theCards);
+        //console.log(state);
+        setTheTableCards(theCards.map((e,i) => {
+
+            return(
+    
+                <PokerCard cardName={e} key={e} />
+    
+            );
+    
+        }));
+        console.log(`theCards = ${theCards}`);
+        return;
+
+    }
+
+    const playerCardsInit = () => {
+
+        if(playerHand.length === 2){
+            // max amt of player cards
+            return;
+        }
+        if(cards.length === 0){
+            return;
+        }
+        let theCards = playerHand;
+        for(let i = 0; i < 2; i++){
+            const aStr: string | undefined = cards.pop();
+            if(aStr !== undefined){
+                theCards.push(aStr);
+            }
+        }
+        setPlayerHand(theCards);
+        setThePlayerCards(theCards.map((e,i) => {
+
+            return(
+    
+                <PokerCard cardName={e} key={e} />
+    
+            );
+    
+        }));
+        //console.log(state);
+
+    }
+
+    const computerCardsInit = () => {
+        
+        if(computerHand.length === 2){
+            return;
+        }
+        if(cards.length === 0){
+            return;
+        }
+        let theCards = computerHand;
+        for(let i = 0; i < 2; i++){
+            const aStr: string | undefined = cards.pop();
+            if(aStr !== undefined){
+                theCards.push(aStr);
+            }
+        }
+        setComputerHand(theCards);
+        setTheComputerCards(theCards.map((e,i) => {
+
+            return(
+    
+                <PokerCard cardName={"backofcard"} key={e} />
+    
+            );
+    
+        }));
+        //console.log(state);
+
+    }
+
+    const startGame = () => {
+
+        /*
+
+        Calculate card combos
+
+        */
+
+        let tableRes = tableCardsInit();
+
+        console.log(`Playerhand = ${playerHand} and computerHand = ${computerHand} and tableCards = ${tableCards}`);
+
+        playerCardsInit();
+        computerCardsInit();
+        if(tableCards.length > 0){
+            let res: string[] = [...tableCards,...playerHand];
+            console.log(`the hand = ${res}`);
+            let comboResult: number;
+            comboResult = cardCombos(res);
+            console.log(`The result was : ${comboResult}`);
+        }
+
+        let element: HTMLElement | null = document.getElementById('mainButton');
+        if(element !== null){
+            element.innerHTML = "Deal Table Card";
+        }
+
     
     }
 
-    // get computer guesses
-
-    // default to 5 guesses <--- may add difficulty functionality later on (reset board, regenerate guesses) also perhaps add customizable functionality such as 
-    // the user determining the board size rather than default 5x5, also maybe add implementation so instead of picking 5 random points separately, they are conjoined
-    // together to form a "ship"
-
-    // really odd behavior when using random numbers, they would change from here to being passed to the board, unsure why, and then when I called set hits in the board func,
-    // it would edit the random numbers as well
-
-    const postWin = (setBoardGuesses: React.Dispatch<React.SetStateAction<string[]>>): void => {
-
-        let guesses = getCompGuesses();
-        setComputerGuess(guesses);
-        setHitsArr([]);
-        setBoardGuesses(guesses);
-
-    }
-
-    const compGuess: string[] = getCompGuesses();
-
-    const[computerGuess,setComputerGuess] = useState<string[]>(compGuess);
-
-    const [misses,setMisses] = useState<number>(0);
-    const [hits,setHits] = useState<number>(0);
-    const [wins,setWins] = useState<number>(0);
-
-    console.log(`wins = ${wins}`);
-
-    const [hitsArr,setHitsArr] = useState<string[]>([]);
-
-    const [guesses,setGuesses] = useState<string[]>([]);
-
-    //console.log(`compguess = ${compGuess}`);
-
-    console.log(`hits = ${hits}`);
+    console.log(`theplayercards = ${thePlayerCards}`);
 
     return(
+        
         <>
-            <Row style={{textAlign: "center"}}>
-                <Col>
+                <Container fluid>
+                    <Row>
+                        <Col><h1 style={{textAlign: "center"}}>Poker Game</h1></Col>
+                    </Row>
+                    <Row>
+                        <Col><h3 style={{textAlign: "center"}}>Wins : 0</h3></Col>
+                        <Col><h3 style={{textAlign: "center"}}>Chips : {chips}</h3></Col>
+                        <Col><h3 style={{textAlign: "center"}}>Losses : 0</h3></Col>
+                    </Row>
+                    <br />
+                    <br />
+                    <br />
+                    <Row>
+                        <Col>
 
-                    <h3><Badge bg="primary" id="missesBadge">Misses : {misses}</Badge></h3>
+                            <h4 style={{textAlign: "center"}}>Table Cards</h4>
 
-                </Col>
-                <Col>
+                        </Col>
+                    </Row>
+                    <Row>
 
-                    <h3><Badge bg="primary" id="hitsbadge">Hits : {hits}</Badge></h3>
+                        <Col style={{border: "2px dashed black"}}>{theTableCards}</Col>
 
-                </Col>
-                <Col>
+                    </Row>
+                    <br />
+                    <Row>
 
-                    <h3><Badge bg="primary" id="sankBadge">Wins : {wins}</Badge></h3>
+                        <Col>
+                        
+                        <h4 style={{textAlign: "center"}}>Computer Cards</h4>
+                        
+                        </Col>
 
-                </Col>
-            </Row>
-            <Row>
+                    </Row>
+                    <Row>
 
-                <Col>
+                        <Col style={{border: "2px dashed black"}}>{theComputerCards}</Col>
 
-                <Board theOptions={options} theCompGuesses={computerGuess} updateHits={setHits} updateWins={setWins} updateMisses={setMisses} numHits={hits} numMisses={misses} numWins={wins} updateHitArr={setHitsArr} theHitsArr={hitsArr} winProcedure={postWin} guessesArr={guesses} setGuessesArr={setGuesses}/>
+                    </Row>
+                    <Row>
+                        <Col style={{textAlign: "center"}}><h4>Player Cards</h4></Col>
+                    </Row>
+                    <Row>
+                        <Col style={{border: "2px dashed black"}}>{thePlayerCards}</Col>
+                    </Row>
+                    <Row>
+                        <Col>
+                            <Button variant="primary" style={{margin: "auto", display: "block", textAlign: "center"}}>Fold</Button>
+                        </Col>
+                        <Col>
+                            <Button variant="primary" style={{margin: "auto", display: "block", textAlign: "center"}}>Raise</Button>
+                        </Col>
+                        <Col>
+                            <Button variant="primary" style={{margin: "auto", display: "block", textAlign: "center"}}>Call</Button>
+                        </Col>
+                    </Row>
+                    <br />
+                    <br />
+                    <Row>
 
-                </Col>
+                        <Col>
+                            <Button variant="primary" onClick={startGame} style={{margin: "auto", display: "block", textAlign: "center"}} id="mainButton">Start Game</Button>
+                        </Col>
 
-            </Row>
-            <br />
-            <br />
-            <Row>
-                <Col>
+                    </Row>
+                </Container>
+            </>
 
-                    <NavigationButton/>
 
-                </Col>
-            </Row>
-        </>
     );
 
+
 }
+
 
 ReactDOM.render(
 
@@ -365,6 +616,6 @@ ReactDOM.render(
 
         <MainPage />
 
-    </React.StrictMode>, document.getElementById('root')
+    </React.StrictMode>,document.getElementById('root')
 
 );
