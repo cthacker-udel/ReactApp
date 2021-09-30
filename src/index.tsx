@@ -9,7 +9,7 @@ import Form from 'react-bootstrap/Form';
 import Image from 'react-bootstrap/Image'
 
 
-function PokerCard(props: {cardName: string}){
+function PokerCard(props: {cardName: string}): JSX.Element{
 
     return(
 
@@ -23,7 +23,7 @@ function PokerCard(props: {cardName: string}){
 }
 
 
-function MainPage(){
+function MainPage(): JSX.Element{
 
     /*
 
@@ -31,7 +31,7 @@ function MainPage(){
 
     */
 
-        const royalFlush = (cards: string[]) => {
+        const royalFlush = (cards: string[]): boolean => {
 
             let suits = ['hearts','clubs','spades','diamonds'];
             let ranks = ['ace','king','queen','jack','ten'];
@@ -58,7 +58,7 @@ function MainPage(){
         
         }
         
-        const sameSuit = (cards: string[]) => {
+        const sameSuit = (cards: string[]): boolean => {
         
             let suits = ['hearts','clubs','spades','diamonds'];
 
@@ -88,7 +88,7 @@ function MainPage(){
         
         }
         
-        const consecutive = (cards: string[]) => {
+        const consecutive = (cards: string[]): boolean => {
 
             interface ranks{
 
@@ -178,7 +178,7 @@ function MainPage(){
         
         }
         
-        const straightFlush = (cards: string[]) => {
+        const straightFlush = (cards: string[]): boolean => {
         
             if(!sameSuit(cards)){
                 return false;
@@ -187,12 +187,13 @@ function MainPage(){
                 return false;
             }
             cards.sort((a,b) => getCardRank(a) - getCardRank(b));
+            return true;
         
         
         
         }
 
-        const rankCount = (card: string,cards: string[]) => {
+        const rankCount = (card: string,cards: string[]): number => {
 
             if(cards === undefined || card === undefined){
                 return 0;
@@ -207,7 +208,7 @@ function MainPage(){
 
         }
 
-        const fourOfAKind = (cards: string[]) => {
+        const fourOfAKind = (cards: string[]): boolean => {
 
             for(let eachcard of cards){
 
@@ -221,7 +222,7 @@ function MainPage(){
 
         }
 
-        const fullHouse = (cards: string[]) => {
+        const fullHouse = (cards: string[]): boolean => {
 
             let found2kind = false;
             let found3kind = false;
@@ -241,19 +242,19 @@ function MainPage(){
 
         }
 
-        const flush = (cards: string[]) => {
+        const flush = (cards: string[]): boolean => {
 
             return sameSuit(cards);
 
         }
 
-        const straight = (cards: string[]) => {
+        const straight = (cards: string[]): boolean => {
 
             return consecutive(cards);
 
         }
 
-        const threeOfAKind = (cards: string[]) => {
+        const threeOfAKind = (cards: string[]): boolean => {
 
             for(let eachcard of cards){
 
@@ -267,7 +268,7 @@ function MainPage(){
 
         }
 
-        const twoPairs = (cards: string[]) => {
+        const twoPairs = (cards: string[]): boolean => {
 
             let cnt = 0;
             let rankSet = new Set<string>();
@@ -289,7 +290,7 @@ function MainPage(){
 
         }
 
-        const onePair = (cards: string[]) => {
+        const onePair = (cards: string[]): boolean => {
 
             for(let eachcard of cards){
 
@@ -305,7 +306,7 @@ function MainPage(){
 
 
 
-        const cardCombos = (cards: string[]) => {
+        const cardCombos = (cards: string[]): number => {
 
             /*
 
@@ -361,7 +362,7 @@ function MainPage(){
     */
 
     /* from https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array [first answer] */
-    const shuffle = (array: string[]) => {
+    const shuffle = (array: string[]): string[] => {
 
         for(let i = 0; i < 10; i++){
             var currentIndex = array.length,  randomIndex;
@@ -381,7 +382,7 @@ function MainPage(){
         return array;
     }
 
-    const [cards,setCards] = useState(shuffle(['acehearts','kinghearts','queenhearts','jackhearts','tenhearts','ninehearts','eighthearts','sevenhearts','sixhearts','fivehearts','fourhearts','threehearts',
+    const [cards,setCards] = useState<string[]>(shuffle(['acehearts','kinghearts','queenhearts','jackhearts','tenhearts','ninehearts','eighthearts','sevenhearts','sixhearts','fivehearts','fourhearts','threehearts',
                                 'twohearts','acediamonds','kingdiamonds','queendiamonds','jackdiamonds','tendiamonds','ninediamonds','eightdiamonds','sevendiamonds','sixdiamonds','fivediamonds',
                                 'fourdiamonds','threediamonds','twodiamonds','acespades','kingspades','queenspades','jackspades','tenspades','ninespades','eightspades','sevenspades',
                                 'sixspades','fivespades','fourspades','threespades','twospades','aceclubs','kingclubs','queenclubs','jackclubs','tenclubs','nineclubs','eightclubs',
@@ -405,7 +406,7 @@ function MainPage(){
 
     }
 
-    const tableCardsInit = () => {
+    const tableCardsInit = (): void => {
 
         if(tableCards.length === 5){
             // max amt of cards
@@ -441,7 +442,7 @@ function MainPage(){
 
     }
 
-    const playerCardsInit = () => {
+    const playerCardsInit = (): void => {
 
         if(playerHand.length === 2){
             // max amt of player cards
@@ -471,7 +472,7 @@ function MainPage(){
 
     }
 
-    const computerCardsInit = () => {
+    const computerCardsInit = (): void => {
         
         if(computerHand.length === 2){
             return;
@@ -500,15 +501,13 @@ function MainPage(){
 
     }
 
-    const startGame = () => {
+    const startGame = (): void => {
 
         /*
 
         Calculate card combos
 
         */
-
-        let tableRes = tableCardsInit();
 
         console.log(`Playerhand = ${playerHand} and computerHand = ${computerHand} and tableCards = ${tableCards}`);
 
