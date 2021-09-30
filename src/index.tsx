@@ -8,9 +8,9 @@ import Table from 'react-bootstrap/Table';
 import Offcanvas from 'react-bootstrap/Offcanvas';
 import Badge from 'react-bootstrap/Badge'
 
-function Board(props: {theOptions: string[][], theCompGuesses: string[], updateHits: React.Dispatch<React.SetStateAction<number>>, updateWins: React.Dispatch<React.SetStateAction<number>>, updateMisses: React.Dispatch<React.SetStateAction<number>>, numHits: number, numMisses: number, numWins: number}){
-    //  TODO: fill out props types
-            // <Board theOptions={options} theCompGuesses={computerGuess} updateHits={setHits} updateWins={setWins} updateMisses={setMisses} numHits={hits} numMisses={misses} numWins={wins} updateHitArr={setHitsArr} theHitsArr={hitsArr} winProcedure={postWin} guessesArr={guesses} setGuessesArr={setGuesses}/>
+function Board(props: {theOptions: string[][], theCompGuesses: string[], updateHits: React.Dispatch<React.SetStateAction<number>>, updateWins: React.Dispatch<React.SetStateAction<number>>, updateMisses: React.Dispatch<React.SetStateAction<number>>, numHits: number, numMisses: number, numWins: number, updateHitArr: React.Dispatch<React.SetStateAction<string[]>>, theHitsArr: string[], winProcedure: (func:React.Dispatch<React.SetStateAction<string[]>>) => void, guessesArr: string[], setGuessesArr: React.Dispatch<React.SetStateAction<string[]>>}){
+        //  TODO: fill out props types
+                                                                                // <Board theOptions={options} theCompGuesses={computerGuess} updateHits={setHits} updateWins={setWins} updateMisses={setMisses} numHits={hits} numMisses={misses} numWins={wins} updateHitArr={setHitsArr} theHitsArr={hitsArr} winProcedure={postWin} guessesArr={guesses} setGuessesArr={setGuesses}/>
 
     const [theGuesses,setTheGuesses] = useState(props.theCompGuesses);
 
@@ -276,7 +276,7 @@ function MainPage(): JSX.Element{
     // really odd behavior when using random numbers, they would change from here to being passed to the board, unsure why, and then when I called set hits in the board func,
     // it would edit the random numbers as well
 
-    const postWin = (setBoardGuesses) => {
+    const postWin = (setBoardGuesses: React.Dispatch<React.SetStateAction<string[]>>): void => {
 
         let guesses = getCompGuesses();
         setComputerGuess(guesses);
