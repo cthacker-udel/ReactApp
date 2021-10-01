@@ -84,9 +84,46 @@ export function MainPage(): JSX.Element{
     // track state of game
     const [raise,setRaise] = useState<boolean>(false);
     const [call,setCall] = useState<boolean>(false);
-    const [fold,setFold] = useState<boolean>(false);
 
     const [strengthText,setStrengthText] = useState<string>("");
+
+
+    /*
+
+    END GAME FUNCTION
+
+    */
+
+    const endGame = (user: number) => {
+
+        let tmpCmpLosses: number = computerLosses;
+        let tmpUserLosses: number = userLosses;
+        let tmpCmpWins: number = computerWins;
+        let tmpUserWins: number = userWins;
+
+        if(user === 2){
+            // computer lost
+            setComputerLosses(++tmpCmpLosses);
+            setUserWins(++tmpUserWins);
+        }
+        else{
+            setUserLosses(++tmpUserLosses);
+            setComputerWins(++tmpCmpWins);
+        }
+        setDeck(fullDeck);
+        setGameStarted(false);
+        setTurn(true);
+        setRaise(false);
+        setCall(false);
+        setStrengthText("");
+        setPlayerHand([]);
+        setComputerHand([]);
+        setTableCards([]);
+        setThePlayerCards([]);
+        setTheComputerCards([]);
+        setTheTableCards([]);
+
+    }
 
     /*
 
@@ -105,6 +142,7 @@ export function MainPage(): JSX.Element{
                 // fold
                 alert('Computer folds');
                 // end game
+                endGame(2);
             }
             else if(compDecision === 2){
                 alert('Computer raises');
@@ -123,11 +161,13 @@ export function MainPage(): JSX.Element{
 
     },[moveSelected]);
 
+
     useEffect(() => {
 
         setMainButtonText("Deal Table Cards");
 
     },[playerHand,computerHand]);
+
 
     useEffect(() => {
 
@@ -194,7 +234,7 @@ export function MainPage(): JSX.Element{
             alert('User selects call');
         }
         else{
-            alert(`Already selected : ${call? "call": fold? "fold": "raise"}`);
+            alert(`Already selected : ${call? "call": "raise"}`);
         }
 
     }
@@ -203,15 +243,8 @@ export function MainPage(): JSX.Element{
 
         if(!moveSelected){
             // user presses fold
-            setFold(true);
             alert('User folds');
-            let tmpComputerWins = computerWins;
-            setComputerWins(++tmpComputerWins);
-            let tmpUserLosses = userLosses;
-            setUserLosses(++tmpUserLosses);
-        }
-        else{
-            alert(`Already selected : ${call? "call": fold? "fold": "raise"}`);
+            endGame(1);
         }
 
     } 
@@ -347,12 +380,3 @@ export function MainPage(): JSX.Element{
 
 
 }
-
-
-/*
-
-Maybe put in
-
-<Badge bg={turn? "primary": "secondary"} style={{textAlign: "center", display: "block"}}>Current Turn :  {turn? "User": "Computer"}</Badge>
-
-*/
