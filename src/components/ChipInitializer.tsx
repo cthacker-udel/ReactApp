@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import {Modal,Button,Form} from 'react-bootstrap';
 
-export const RaiseForm = (props: {appear: boolean, playerChips: number, raiseAmt: number}): JSX.Element => {
+export const ChipInitializer = (props: {appear: boolean, playerChips: number, submitChips: (amt: number) => void}): JSX.Element => {
 
     const [chipAmount,setChipAmount] = useState<string>("0");
 
@@ -11,17 +11,17 @@ export const RaiseForm = (props: {appear: boolean, playerChips: number, raiseAmt
 
             <Modal show={props.appear} onHide={() => {console.log(`calling onHide`)}}>
                 <Modal.Header>
-                    Raise Demand : Amount [{props.raiseAmt}]
+                    Chip Amount
                 </Modal.Header>
                 <Modal.Body>
-                    Input amount to raise
+                    Input amount of chips to enter
                 </Modal.Body>
                 <Modal.Footer>
 
                     <Form>
 
                         <Form.Group className="raiseText" controlId="raiseAmt">
-                            <Form.Label>Number of Chips to Raise [Current Amount : ${props.playerChips}</Form.Label>
+                            <Form.Label>Number of Chips to Enter [Current Amount : ${props.playerChips}</Form.Label>
                             <Form.Control type="number" value={chipAmount} placeholder={"0"} name={"raiseForm"}  onChange={(e) => {
 
 
@@ -35,7 +35,7 @@ export const RaiseForm = (props: {appear: boolean, playerChips: number, raiseAmt
                                         setChipAmount(String(amt));
                                     }
                                     else if(value < 0){
-                                        alert('Not allowed to raise negative chips');
+                                        alert('Not allowed to enter negative chips');
                                         setChipAmount("0");
                                     }
                                     else{
@@ -45,13 +45,15 @@ export const RaiseForm = (props: {appear: boolean, playerChips: number, raiseAmt
 
                                     }}>
                             </Form.Control>
-                            <Form.Text>Raise amount goes above ^^</Form.Text>
+                            <Form.Text>Chip enter amount goes above ^^</Form.Text>
                         </Form.Group>
 
                     </Form>
-                    <Button variant="primary" onClick={() => {console.log('hello world')}}>Re-raise amount</Button>
-                    <Button variant="primary" onClick={() => {console.log('hello world')}}>Fold</Button>
-                    <Button variant="primary" onClick={() => {console.log('hello world')}}>Call</Button>
+                    <Button variant="primary" onClick={() => {
+
+                        props.submitChips(parseInt(chipAmount));
+
+                    }}>Submit amount</Button>
 
                 </Modal.Footer>
             </Modal>

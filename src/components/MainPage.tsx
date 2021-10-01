@@ -6,6 +6,7 @@ import {ControlPanel} from './ControlPanel';
 import {shuffle,cardCombos,computerDecide} from '../utilities/PokerMethods';
 import {ScoreBoard} from './ScoreBoard';
 import {RaiseForm} from './RaiseForm';
+import {ChipInitializer} from './ChipInitializer';
 
 
 export function MainPage(): JSX.Element{
@@ -83,10 +84,13 @@ export function MainPage(): JSX.Element{
 
     // track state of game
     const [raise,setRaise] = useState<boolean>(false);
+    const [raiseAmt,setRaiseAmt] = useState<number>(0);
+
     const [call,setCall] = useState<boolean>(false);
 
     const [strengthText,setStrengthText] = useState<string>("");
 
+    const [modalAppear,setModalAppear] = useState<boolean>(false);
 
     /*
 
@@ -105,12 +109,27 @@ export function MainPage(): JSX.Element{
             // computer lost
             setComputerLosses(++tmpCmpLosses);
             setUserWins(++tmpUserWins);
+            let tmpUserChips = userChips;
+            tmpUserChips += totalChips;
+            setUserChips(tmpUserChips);
         }
-        else{
+        else if(user === 1){
             setUserLosses(++tmpUserLosses);
             setComputerWins(++tmpCmpWins);
+            let tmpComputerChips = computerChips;
+            tmpComputerChips += totalChips;
+            setComputerChips(tmpComputerChips);
         }
-        setDeck(fullDeck);
+        else{
+            let halfOfChips = Math.round(totalChips / 2);
+            let tmpComputerChips = computerChips;
+            tmpComputerChips += halfOfChips;
+            setComputerChips(tmpComputerChips);
+            let tmpUserChips = userChips;
+            tmpUserChips += halfOfChips;
+            setUserChips(tmpUserChips);
+        }
+        setDeck(shuffle(fullDeck));
         setGameStarted(false);
         setTurn(true);
         setRaise(false);
@@ -122,6 +141,8 @@ export function MainPage(): JSX.Element{
         setThePlayerCards([]);
         setTheComputerCards([]);
         setTheTableCards([]);
+        setTotalChips(0);
+        setMoveSelected(false);
 
     }
 
@@ -134,7 +155,7 @@ export function MainPage(): JSX.Element{
     useEffect(() => {
 
         // check if turn is players or computers
-        
+
         if(moveSelected){
             // user selected move
             let compDecision: number = computerDecide(playerHand,computerHand,tableCards);
@@ -148,13 +169,35 @@ export function MainPage(): JSX.Element{
                 alert('Computer raises');
                 //setRaise(true);
                 setMoveSelected(false);
+                let raiseAmount: number = Math.ceil(Math.random() * (totalChips / 10));
+                setRaiseAmt(raiseAmount);
                 // implement raise functionality
+                // raise.. then reset moveSelected, maybe have option to fold in reset modal
+                // return answer as int, 0 is fold, 1 is call, 2 is re-raise with new amt
+                // maybe record answer in state or return in function
+                setRaise(true); // makes modal appear
             }
             else{
-                alert('Computer calls');
-                setMoveSelected(false);
-                drawCards(false,deck,setDeck,tableCards,setTableCards,1,setTheTableCards);
-                // implement raise maybe?
+                if(tableCards.length === 5){
+                    // conduct endgame function
+                    let compRank = cardCombos([...computerHand,...tableCards]);
+                    let userRank = cardCombos([...playerHand,...tableCards]);
+                    if(userRank > compRank){
+                        endGame(2);
+                    }
+                    else if(userRank < compRank){
+                        endGame(1);
+                    }
+                    else{
+                        alert('Tie!');
+                        endGame(0);
+                    }
+                }
+                else{
+                    alert('Computer calls');
+                    setMoveSelected(false);
+                    drawCards(false,deck,setDeck,tableCards,setTableCards,1,setTheTableCards);
+                }
             }
 
         }
@@ -213,7 +256,6 @@ export function MainPage(): JSX.Element{
             }
             console.log(`hand strength = ${handStrength}`);
             setStrengthText(handStrength);
-
         }
 
 
@@ -248,6 +290,22 @@ export function MainPage(): JSX.Element{
         }
 
     } 
+
+    const raiseFunc = (decision: number, amt: number) => {
+
+        if(decision === 0){
+            // user folded
+            endGame(1);
+        }
+        else if(decision === 1){
+            // called amount
+        }
+        else{
+            // reraised amount
+            setMoveSelected(true);
+        }
+
+    }
 
 
     const drawCards = (isComputer: boolean, deck: string[], setDeck: React.Dispatch<React.SetStateAction<string[]>>, hand: string[], setHand: React.Dispatch<React.SetStateAction<string[]>>, amount: number, setJSXHand: React.Dispatch<React.SetStateAction<JSX.Element[]>>) => {
@@ -290,6 +348,7 @@ export function MainPage(): JSX.Element{
             drawCards(false,deck,setDeck,tableCards,setTableCards,3,setTheTableCards);
             drawCards(true,deck,setDeck,computerHand,setComputerHand,2,setTheComputerCards);
             setGameStarted(true);
+            setModalAppear(true);
         }
         else{
             if(tableCards.length === 5){
@@ -370,7 +429,31 @@ export function MainPage(): JSX.Element{
 
                     </Row>
                     <Row>
-                        <Col><RaiseForm appear={raise} playerChips={userChips}/></Col>
+                        <Col><RaiseForm appear={raise} playerChips={userChips} raiseAmt={raiseAmt}/></Col>
+                    </Row>
+                    <Row>
+                        <Col><ChipInitializer appear={modalAppear} submitChips={(amt: number) => {
+
+                            let tmpUserChips = userChips;
+                            tmpUserChips -= amt;
+
+                            if(amt > computerChips){
+                                amt += computerChips;
+                                setComputerChips(0);
+                            }
+                            else{
+                                let tmpComputerChips: number = computerChips;
+                                tmpComputerChips -= amt;
+                                amt += amt;
+                                setComputerChips(tmpComputerChips);
+                            }
+                            setTotalChips(amt);
+
+
+                            setUserChips(tmpUserChips);
+                            setModalAppear(false);
+
+                        }} playerChips={userChips}/></Col>
                     </Row>
                 </Container>
             </>
