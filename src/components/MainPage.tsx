@@ -1,20 +1,23 @@
 import React, {useState, useEffect} from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import {Badge, Button, Container, Row, Col} from 'react-bootstrap';
+import {Badge, Button, Container, Row, Col, Card} from 'react-bootstrap';
 import {PokerCard} from './PokerCard';
 import {ControlPanel} from './ControlPanel';
 import {shuffle,cardCombos,computerDecide} from '../utilities/PokerMethods';
 import {ScoreBoard} from './ScoreBoard';
+import {RaiseForm} from './RaiseForm';
 
 
 export function MainPage(): JSX.Element{
 
-    const [deck,setDeck] = useState<string[]>(shuffle(['acehearts','kinghearts','queenhearts','jackhearts','tenhearts','ninehearts','eighthearts','sevenhearts','sixhearts','fivehearts','fourhearts','threehearts',
-                                'twohearts','acediamonds','kingdiamonds','queendiamonds','jackdiamonds','tendiamonds','ninediamonds','eightdiamonds','sevendiamonds','sixdiamonds','fivediamonds',
-                                'fourdiamonds','threediamonds','twodiamonds','acespades','kingspades','queenspades','jackspades','tenspades','ninespades','eightspades','sevenspades',
-                                'sixspades','fivespades','fourspades','threespades','twospades','aceclubs','kingclubs','queenclubs','jackclubs','tenclubs','nineclubs','eightclubs',
-                                'sevenclubs','sixclubs','fiveclubs','fourclubs','threeclubs','twoclubs'
-                                ]));
+    const fullDeck: string[] = ['acehearts','kinghearts','queenhearts','jackhearts','tenhearts','ninehearts','eighthearts','sevenhearts','sixhearts','fivehearts','fourhearts','threehearts',
+    'twohearts','acediamonds','kingdiamonds','queendiamonds','jackdiamonds','tendiamonds','ninediamonds','eightdiamonds','sevendiamonds','sixdiamonds','fivediamonds',
+    'fourdiamonds','threediamonds','twodiamonds','acespades','kingspades','queenspades','jackspades','tenspades','ninespades','eightspades','sevenspades',
+    'sixspades','fivespades','fourspades','threespades','twospades','aceclubs','kingclubs','queenclubs','jackclubs','tenclubs','nineclubs','eightclubs',
+    'sevenclubs','sixclubs','fiveclubs','fourclubs','threeclubs','twoclubs'
+    ];
+
+    const [deck,setDeck] = useState<string[]>(shuffle(fullDeck));
 
     // if move has been selected
     const [moveSelected,setMoveSelected] = useState<boolean>(false);
@@ -83,6 +86,8 @@ export function MainPage(): JSX.Element{
     const [call,setCall] = useState<boolean>(false);
     const [fold,setFold] = useState<boolean>(false);
 
+    const [strengthText,setStrengthText] = useState<string>("");
+
     /*
 
             <<<<< USE EFFECTS >>>>>
@@ -92,14 +97,27 @@ export function MainPage(): JSX.Element{
     useEffect(() => {
 
         // check if turn is players or computers
-        if(!moveSelected){
-
-            alert('Your turn? Fold/Call/Raise');
-
-        }
-        else{
-
-            // make computer choose
+        
+        if(moveSelected){
+            // user selected move
+            let compDecision: number = computerDecide(playerHand,computerHand,tableCards);
+            if(compDecision === 3){
+                // fold
+                alert('Computer folds');
+                // end game
+            }
+            else if(compDecision === 2){
+                alert('Computer raises');
+                //setRaise(true);
+                setMoveSelected(false);
+                // implement raise functionality
+            }
+            else{
+                alert('Computer calls');
+                setMoveSelected(false);
+                drawCards(false,deck,setDeck,tableCards,setTableCards,1,setTheTableCards);
+                // implement raise maybe?
+            }
 
         }
 
@@ -111,6 +129,56 @@ export function MainPage(): JSX.Element{
 
     },[playerHand,computerHand]);
 
+    useEffect(() => {
+
+        if(gameStarted){
+
+            let handRank: number = cardCombos([...playerHand,...tableCards]);
+
+            let handStrength: string = "";
+
+            switch(handRank){
+
+                case 1:
+                    handStrength = "Royal Flush";
+                    break;
+                case 2:
+                    handStrength = "Straight Flush";
+                    break;
+                case 3:
+                    handStrength = "Four of a Kind";
+                    break
+                case 4:
+                    handStrength = "Full House";
+                    break;
+                case 5:
+                    handStrength = "Flush";
+                    break;
+                case 6:
+                    handStrength = "Straight";
+                    break;
+                case 7:
+                    handStrength = "Three of a Kind";
+                    break;
+                case 8:
+                    handStrength = "Two Pairs";
+                    break;
+                case 9:
+                    handStrength = "Pair";
+                    break;
+                default:
+                    handStrength = "High Card";
+                    break;
+
+            }
+            console.log(`hand strength = ${handStrength}`);
+            setStrengthText(handStrength);
+
+        }
+
+
+    },[tableCards]);
+
     /*
 
             <<<<< USE EFFECTS >>>>>
@@ -120,6 +188,7 @@ export function MainPage(): JSX.Element{
     const callClick = (): void => {
 
         if(!moveSelected){
+            // user presses call
             setCall(true);
             setMoveSelected(true);
             alert('User selects call');
@@ -133,6 +202,7 @@ export function MainPage(): JSX.Element{
     const foldClick = (): void => {
 
         if(!moveSelected){
+            // user presses fold
             setFold(true);
             alert('User folds');
             let tmpComputerWins = computerWins;
@@ -187,7 +257,6 @@ export function MainPage(): JSX.Element{
             drawCards(false,deck,setDeck,tableCards,setTableCards,3,setTheTableCards);
             drawCards(true,deck,setDeck,computerHand,setComputerHand,2,setTheComputerCards);
             setGameStarted(true);
-            alert('Your turn? Call/Fold/Raise?');
         }
         else{
             if(tableCards.length === 5){
@@ -215,11 +284,13 @@ export function MainPage(): JSX.Element{
                         <ScoreBoard userWins={userWins} computerWins={computerWins} userChips={userChips} computerChips={computerChips} userLosses={userLosses} computerLosses={computerLosses} />
                     </Row>
                     <Row>
-                        <Col><h5 style={{textAlign: "center"}}>Total Chips : {totalChips}</h5></Col>
+                        <Card>
+                        <Col><Card.Body><h5 style={{textAlign: "center"}}>Total Chips : {totalChips}</h5></Card.Body></Col>
+                        </Card>
                     </Row>
 
                     <br />
-                        <Badge bg={turn? "primary": "secondary"} style={{textAlign: "center", display: "block"}}>Current Turn :  {turn? "User": "Computer"}</Badge>
+                    <Badge bg={"primary"} style={{textAlign: "center", display: "block"}}>Current Hand Strength :  {strengthText}</Badge>
                     <br />
                     <Row>
                         <Col>
@@ -265,6 +336,9 @@ export function MainPage(): JSX.Element{
                         </Col>
 
                     </Row>
+                    <Row>
+                        <Col><RaiseForm appear={raise} playerChips={userChips}/></Col>
+                    </Row>
                 </Container>
             </>
 
@@ -273,3 +347,12 @@ export function MainPage(): JSX.Element{
 
 
 }
+
+
+/*
+
+Maybe put in
+
+<Badge bg={turn? "primary": "secondary"} style={{textAlign: "center", display: "block"}}>Current Turn :  {turn? "User": "Computer"}</Badge>
+
+*/

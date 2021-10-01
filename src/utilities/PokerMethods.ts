@@ -34,7 +34,7 @@ export const royalFlush = (cards: string[]): boolean => {
 
 export const sameSuit = (cards: string[]): boolean => {
 
-    let suits = ['hearts','clubs','spades','diamonds'];
+    let iSuits = ['hearts','clubs','spades','diamonds'];
 
     interface suits {
 
@@ -51,7 +51,7 @@ export const sameSuit = (cards: string[]): boolean => {
 
     for(let i = 0; i < cards.length; i++){
 
-        for(let j of suits){
+        for(let j of iSuits){
             if(cards[i].includes(j)){
                 theSuits[j] += 1;
             }
@@ -362,6 +362,26 @@ export const shuffle = (array: string[]): string[] => {
     return array;
 }
 
+export const isPrime = (num: number): boolean => {
+    if(num < 2){
+        return true;
+    }
+    else if(num < 0){
+        return false;
+    }
+    else if(num === 2 || num === 3 || num === 5){
+        return true;
+    }
+    else{
+        for(let i = 2; i <= Math.ceil(Math.sqrt(num)); i++){
+            if(num % i === 0){
+                return false;
+            }
+        }
+        return true;
+    }
+}
+
 export const computerDecide = (userCards: string[], computerCards: string[], tableCards: string[]): number => {
 
     /*
@@ -390,9 +410,12 @@ export const computerDecide = (userCards: string[], computerCards: string[], tab
                 // call
                 return 1;
             }
-            else{
+            else if(isPrime(randomNumber)){
                 // fold
                 return 3;
+            }
+            else{
+                return 1;
             }
         }
 
@@ -420,9 +443,12 @@ export const computerDecide = (userCards: string[], computerCards: string[], tab
                 // raise
                 return 2;
             }
-            else{
+            else if(isPrime(randomNumber)){
                 // fold
                 return 3;
+            }
+            else{
+                return 1;
             }
 
         }
