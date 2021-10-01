@@ -458,3 +458,80 @@ export const computerDecide = (userCards: string[], computerCards: string[], tab
     return -1;
 
 }
+
+export const computerDecideRaised = (userCards: string[], computerCards: string[], tableCards: string[]): number => {
+
+    /*
+
+    1) Call
+    2) Raise
+    3) Fold
+
+    */
+
+    let computerHandRank = cardCombos([...computerCards,...tableCards]);
+    let playerHandRank = cardCombos([...userCards,...tableCards]);
+    let randomNumber: number = Math.floor((Math.random()*100)) % Math.floor(Math.random() * 10000);
+
+    if(computerHandRank === 0){
+
+        // check if high card is better than theirs if not, fold
+        if(playerHandRank !== 0){
+            // fold
+            return 2;
+        }
+        else{
+            let compHighCard: number = getHighCard([...computerCards,...tableCards]);
+            let playerHighCard: number = getHighCard([...userCards,...tableCards]);
+            if(compHighCard > playerHighCard){
+                // call
+                return 1;
+            }
+            else if(isPrime(randomNumber)){
+                // fold
+                return 3;
+            }
+            else{
+                return 1;
+            }
+        }
+
+    }
+    else{
+
+        if(computerHandRank > playerHandRank){
+            // determine whether to call or raise
+            if(randomNumber % 2 === 0){
+                // call
+                return 1;
+            }
+            else{
+                // fold
+                return 3;
+            }
+        }
+        else if(computerHandRank === playerHandRank){
+
+            if(randomNumber % 2 === 0){
+                // call
+                return 1;
+            }
+            else if(randomNumber % 2 !== 0){
+                // call
+                return 1;
+            }
+            else if(isPrime(randomNumber)){
+                // fold
+                return 3;
+            }
+            else{
+                return 1;
+            }
+
+        }
+
+    }
+
+    return -1;
+
+}

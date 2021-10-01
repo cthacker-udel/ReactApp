@@ -3,10 +3,11 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import {Badge, Button, Container, Row, Col, Card} from 'react-bootstrap';
 import {PokerCard} from './PokerCard';
 import {ControlPanel} from './ControlPanel';
-import {shuffle,cardCombos,computerDecide} from '../utilities/PokerMethods';
+import {shuffle,cardCombos,computerDecide,computerDecideRaised} from '../utilities/PokerMethods';
 import {ScoreBoard} from './ScoreBoard';
 import {RaiseForm} from './RaiseForm';
 import {ChipInitializer} from './ChipInitializer';
+import {RaiseSend} from './RaiseSend';
 
 
 export function MainPage(): JSX.Element{
@@ -84,6 +85,7 @@ export function MainPage(): JSX.Element{
 
     // track state of game
     const [raise,setRaise] = useState<boolean>(false);
+    const [userRaise,setUserRaise] = useState<boolean>(false);
     const [raiseAmt,setRaiseAmt] = useState<number>(0);
 
     const [call,setCall] = useState<boolean>(false);
@@ -93,9 +95,9 @@ export function MainPage(): JSX.Element{
     const [modalAppear,setModalAppear] = useState<boolean>(false);
 
     /*
-
+    #################
     END GAME FUNCTION
-
+    #################
     */
 
     const endGame = (user: number) => {
@@ -112,6 +114,7 @@ export function MainPage(): JSX.Element{
             let tmpUserChips = userChips;
             tmpUserChips += totalChips;
             setUserChips(tmpUserChips);
+            alert('Computer lost');
         }
         else if(user === 1){
             setUserLosses(++tmpUserLosses);
@@ -119,6 +122,7 @@ export function MainPage(): JSX.Element{
             let tmpComputerChips = computerChips;
             tmpComputerChips += totalChips;
             setComputerChips(tmpComputerChips);
+            alert('User lost');
         }
         else{
             let halfOfChips = Math.round(totalChips / 2);
@@ -128,6 +132,7 @@ export function MainPage(): JSX.Element{
             let tmpUserChips = userChips;
             tmpUserChips += halfOfChips;
             setUserChips(tmpUserChips);
+            alert('Tie!');
         }
         setDeck(shuffle(fullDeck));
         setGameStarted(false);
@@ -143,12 +148,14 @@ export function MainPage(): JSX.Element{
         setTheTableCards([]);
         setTotalChips(0);
         setMoveSelected(false);
+        setUserRaise(false);
 
     }
 
     /*
-
+           #########################
             <<<<< USE EFFECTS >>>>>
+           #########################
 
     */
 
@@ -161,7 +168,6 @@ export function MainPage(): JSX.Element{
             let compDecision: number = computerDecide(playerHand,computerHand,tableCards);
             if(compDecision === 3){
                 // fold
-                alert('Computer folds');
                 // end game
                 endGame(2);
             }
@@ -169,7 +175,7 @@ export function MainPage(): JSX.Element{
                 alert('Computer raises');
                 //setRaise(true);
                 setMoveSelected(false);
-                let raiseAmount: number = Math.ceil(Math.ceil(Math.random()+100) * (totalChips / 10));
+                let raiseAmount: number = Math.ceil(Math.ceil(Math.random()+(computerChips / 10)) * (totalChips % 10));
 
                 setRaiseAmt(raiseAmount);
                 // implement raise functionality
@@ -190,7 +196,6 @@ export function MainPage(): JSX.Element{
                         endGame(1);
                     }
                     else{
-                        alert('Tie!');
                         endGame(0);
                     }
                 }
@@ -286,11 +291,71 @@ export function MainPage(): JSX.Element{
 
         if(!moveSelected){
             // user presses fold
-            alert('User folds');
             endGame(1);
         }
 
     } 
+
+    const raiseClick = (): void => {
+
+        if(gameStarted){
+            setUserRaise(true);
+        }
+
+    }
+
+    /*
+
+    Raise functions
+
+    */
+
+    const userRaiseFunc = (amt: number): void => {
+
+        if(amt > computerChips){
+            endGame(2);
+        }
+        else{
+
+            let cmpDecisionR = computerDecideRaised(playerHand,computerHand,tableCards);
+            if(cmpDecisionR === 1){
+                // called
+                // deduct chips and forward turn
+                let tmpComputerChips = computerChips;
+                tmpComputerChips -= amt;
+                let tmpTotalChips = totalChips;
+                tmpTotalChips += amt;
+                setComputerChips(tmpComputerChips);
+                let tmpUserChips = userChips;
+                tmpUserChips -= amt;
+                setTotalChips(totalChips);
+                setUserChips(tmpUserChips);
+                if(tableCards.length === 5){
+                    let compRank = cardCombos([...computerHand,...tableCards]);
+                    let userRank = cardCombos([...playerHand,...tableCards]);
+                    if(userRank > compRank){
+                        endGame(2);
+                    }
+                    else if(userRank < compRank){
+                        endGame(1);
+                    }
+                    else{
+                        endGame(0);
+                    }
+                }
+                else{
+                    setMoveSelected(false);
+                    drawCards(false,deck,setDeck,tableCards,setTableCards,1,setTheTableCards);
+                }
+            }
+            else{
+                endGame(2);
+            }
+
+        }
+        setUserRaise(false);
+
+    }
 
     const raiseFunc = (decision: number, amt: number): void => {
 
@@ -301,6 +366,7 @@ export function MainPage(): JSX.Element{
         else if(decision === 1){
             // called amount
             // deduct chips from user
+            console.log(`raising from comp`);
             let tmpUserChips = userChips;
             tmpUserChips -= amt;
             setUserChips(tmpUserChips);
@@ -319,7 +385,6 @@ export function MainPage(): JSX.Element{
                     endGame(1);
                 }
                 else{
-                    alert('Tie!');
                     endGame(0);
                 }
             }
@@ -393,6 +458,8 @@ export function MainPage(): JSX.Element{
     
     }
 
+    // if you raise computer must call or fold
+
     return(
         
         <>
@@ -446,7 +513,7 @@ export function MainPage(): JSX.Element{
                         <Col style={{border: "2px dashed black"}}>{thePlayerCards}</Col>
                     </Row>
                     <br />
-                    <ControlPanel theTurn={turn} callFunc={callClick} foldFunc={foldClick} />
+                    <ControlPanel theTurn={turn} callFunc={callClick} foldFunc={foldClick} raiseFunc={raiseClick} />
                     <br />
                     <br />
                     <Row>
@@ -483,11 +550,19 @@ export function MainPage(): JSX.Element{
 
                         }} playerChips={userChips}/></Col>
                     </Row>
+                    <Row>
+
+                        <Col>
+                        
+                            <RaiseSend appear={userRaise} playerChips={userChips} raiseFunc={userRaiseFunc}/>
+
+                        </Col>
+
+                    </Row>
                 </Container>
             </>
 
 
     );
-
 
 }

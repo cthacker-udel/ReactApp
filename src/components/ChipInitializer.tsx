@@ -22,26 +22,32 @@ export const ChipInitializer = (props: {appear: boolean, playerChips: number, su
 
                         <Form.Group className="raiseText" controlId="raiseAmt">
                             <Form.Label>Number of Chips to Enter [Current Amount : ${props.playerChips}</Form.Label>
-                            <Form.Control type="number" value={chipAmount} placeholder={"0"} name={"raiseForm"}  onChange={(e) => {
+                            <Form.Control type="text" value={chipAmount} placeholder={"0"} name={"raiseForm"}  onChange={(e) => {
 
+                                        let htmlInputElement = e.target as HTMLInputElement;
 
-                                    let htmlInputElement = e.target as HTMLInputElement;
+                                        let value: number = parseInt(htmlInputElement.value);
 
-                                    let value: number = parseInt(htmlInputElement.value);
-                                    if(value > props.playerChips){
-                                        console.log(`chip amount = ${props.playerChips} and value = ${value}`);
-                                        alert('Not allowed to go above current chip amount');
-                                        let amt: number = parseInt(chipAmount) -1;
-                                        setChipAmount(String(amt));
-                                    }
-                                    else if(value < 0){
-                                        alert('Not allowed to enter negative chips');
-                                        setChipAmount("0");
-                                    }
-                                    else{
-                                        let amt: number = parseInt(chipAmount) + 1;
-                                        setChipAmount(String(amt));
-                                    }
+                                        if(isNaN(value)){
+                                            let tmpChipAmount = chipAmount;
+                                            tmpChipAmount = tmpChipAmount.substring(0,tmpChipAmount.length-1);
+                                            setChipAmount(tmpChipAmount);
+                                        }
+                                        else{
+                                            if(value > props.playerChips){
+                                                console.log(`chip amount = ${props.playerChips} and value = ${value}`);
+                                                alert('Not allowed to go above current chip amount');
+                                                let amt: number = parseInt(chipAmount) -1;
+                                                setChipAmount(String(amt));
+                                            }                                  
+                                            else if(value < 0){
+                                                alert('Not allowed to raise negative chips');
+                                                setChipAmount("0");
+                                            }
+                                            else{
+                                                setChipAmount(String(value));
+                                            }
+                                        }
 
                                     }}>
                             </Form.Control>
