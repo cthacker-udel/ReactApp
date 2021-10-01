@@ -169,7 +169,8 @@ export function MainPage(): JSX.Element{
                 alert('Computer raises');
                 //setRaise(true);
                 setMoveSelected(false);
-                let raiseAmount: number = Math.ceil(Math.random() * (totalChips / 10));
+                let raiseAmount: number = Math.ceil(Math.ceil(Math.random()+100) * (totalChips / 10));
+
                 setRaiseAmt(raiseAmount);
                 // implement raise functionality
                 // raise.. then reset moveSelected, maybe have option to fold in reset modal
@@ -291,7 +292,7 @@ export function MainPage(): JSX.Element{
 
     } 
 
-    const raiseFunc = (decision: number, amt: number) => {
+    const raiseFunc = (decision: number, amt: number): void => {
 
         if(decision === 0){
             // user folded
@@ -299,13 +300,40 @@ export function MainPage(): JSX.Element{
         }
         else if(decision === 1){
             // called amount
+            // deduct chips from user
+            let tmpUserChips = userChips;
+            tmpUserChips -= amt;
+            setUserChips(tmpUserChips);
+            let tmpTotalChips = totalChips;
+            tmpTotalChips += amt;
+            setTotalChips(tmpTotalChips);
+            setRaiseAmt(0);
+            if(tableCards.length === 5){
+                // conduct endgame function
+                let compRank = cardCombos([...computerHand,...tableCards]);
+                let userRank = cardCombos([...playerHand,...tableCards]);
+                if(userRank > compRank){
+                    endGame(2);
+                }
+                else if(userRank < compRank){
+                    endGame(1);
+                }
+                else{
+                    alert('Tie!');
+                    endGame(0);
+                }
+            }
         }
-        else{
-            // reraised amount
-            setMoveSelected(true);
-        }
+        setRaise(false);
 
     }
+
+    /*
+
+            <<<<<<<< ESSENTIAL FUNCTIONS >>>>>>>>
+
+
+    */
 
 
     const drawCards = (isComputer: boolean, deck: string[], setDeck: React.Dispatch<React.SetStateAction<string[]>>, hand: string[], setHand: React.Dispatch<React.SetStateAction<string[]>>, amount: number, setJSXHand: React.Dispatch<React.SetStateAction<JSX.Element[]>>) => {
@@ -429,7 +457,7 @@ export function MainPage(): JSX.Element{
 
                     </Row>
                     <Row>
-                        <Col><RaiseForm appear={raise} playerChips={userChips} raiseAmt={raiseAmt}/></Col>
+                        <Col><RaiseForm appear={raise} playerChips={userChips} raiseAmt={raiseAmt} raiseFunc={raiseFunc}/></Col>
                     </Row>
                     <Row>
                         <Col><ChipInitializer appear={modalAppear} submitChips={(amt: number) => {
